@@ -9,16 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bd: #2e4d88;
-      --blue: #4a72c0;
-      --blue2: #5c84d4;
-      --cream: #f2ecd8;
+      --bd:     #2e4d88;
+      --blue:   #4a72c0;
+      --blue2:  #5c84d4;
+      --cream:  #f2ecd8;
       --cream2: #e6dfc6;
-      --sky: #9fd4ea;
-      --green: #3b7318;
+      --sky:    #9fd4ea;
+      --green:  #3b7318;
     }
+
     html { font-size: 16px; }
+
     body {
       background: linear-gradient(155deg, #c8ecfc 0%, #88c8e8 55%, #56aad4 100%);
       min-height: 100vh;
@@ -27,12 +30,16 @@
       justify-content: center;
       padding: 16px;
     }
+
+    /* ── Window ── */
     .window {
       width: min(960px, 100%);
       border: 3px solid var(--bd);
       box-shadow: 0 0 0 1px #162540, 6px 6px 0 #162540;
       background: var(--cream2);
     }
+
+    /* Title bar */
     .titlebar {
       background: linear-gradient(180deg, #6090d8 0%, #4a72c0 65%, #3860b0 100%);
       display: flex;
@@ -47,28 +54,38 @@
       border: 2px solid var(--bd);
       background: var(--cream);
       cursor: pointer;
-      font-size: 9px; font-family: monospace;
+      font-size: 9px;
+      font-family: monospace;
       color: var(--bd);
       display: flex; align-items: center; justify-content: center;
-      user-select: none; line-height: 1;
+      user-select: none;
+      line-height: 1;
     }
     .tb-btn:hover { background: var(--cream2); }
     .tb-close { background: #cc3838; color: #fff; border-color: #8b1818; }
     .tb-close:hover { background: #aa2828; }
+
+    /* ── Layout ── */
     .body { display: flex; min-height: 560px; }
+
+    /* ── Left Panel ── */
     .left {
       width: 44%;
       background: linear-gradient(180deg, #aad8f0 0%, #90cae8 100%);
       border-right: 3px solid var(--bd);
-      display: flex; flex-direction: column; align-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 14px;
     }
+
     .scene-wrap {
       width: 100%;
       border: 3px solid var(--bd);
       box-shadow: 4px 4px 0 #162540;
       overflow: hidden;
     }
+
     .scene-header {
       background: var(--cream);
       border-bottom: 3px solid var(--bd);
@@ -80,40 +97,70 @@
       line-height: 1.85;
       letter-spacing: 1px;
     }
+
     canvas#scene {
-      display: block; width: 100%;
+      display: block;
+      width: 100%;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
+
+    /* ── Right Panel ── */
     .right {
-      flex: 1; background: var(--cream);
+      flex: 1;
+      background: var(--cream);
       padding: 26px 22px 20px;
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
+
+    /* Header */
     .form-header {
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
     }
+
+    /* Laurel SVG */
     .laurel-svg { flex-shrink: 0; }
+
     .header-text { text-align: center; }
     .header-text h1 {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(8px, 1.55vw, 14px);
-      color: var(--bd); line-height: 1.75; letter-spacing: 0.5px;
+      color: var(--bd);
+      line-height: 1.75;
+      letter-spacing: 0.5px;
     }
     .header-text p {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(5px, 0.85vw, 8px);
-      color: #888; margin-top: 6px; letter-spacing: 1px;
+      color: #888;
+      margin-top: 6px;
+      letter-spacing: 1px;
     }
-    form { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+    /* Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
     .field { display: flex; flex-direction: column; gap: 5px; }
+
     .field label {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(6px, 0.88vw, 8px);
-      color: var(--bd); padding-left: 42px;
+      color: var(--bd);
+      padding-left: 42px;
     }
+
     .input-row { display: flex; align-items: stretch; }
+
     .field-icon {
       width: 38px; min-height: 40px;
       background: #c4d4ee;
@@ -123,102 +170,147 @@
       flex-shrink: 0;
     }
     .field-icon svg { image-rendering: pixelated; display: block; }
+
     .field input {
-      flex: 1; height: 40px;
-      border: 2px solid var(--bd); border-left: none;
+      flex: 1;
+      height: 40px;
+      border: 2px solid var(--bd);
+      border-left: none;
       background: #faf6ed;
       padding: 0 12px;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(6px, 0.9vw, 8.5px);
-      color: #2a2a2a; outline: none; min-width: 0;
+      color: #2a2a2a;
+      outline: none;
+      min-width: 0;
     }
     .field input:focus {
       background: #fffdf5;
       border-color: var(--blue2);
       box-shadow: inset 0 0 0 1px var(--blue2);
     }
-    .field input.err-inp { border-color: #bb2828; background: #fff3f3; }
+    .field input.err-inp {
+      border-color: #bb2828;
+      background: #fff3f3;
+    }
     .field input[type="number"]::-webkit-inner-spin-button,
     .field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
     .field input[type="number"] { -moz-appearance: textfield; }
+
     .err-msg {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(4.5px, 0.7vw, 6.5px);
-      color: #bb2828; padding-left: 42px; display: none;
+      color: #bb2828;
+      padding-left: 42px;
+      display: none;
     }
     .err-msg.show { display: block; }
+
+    /* Submit button */
     .submit-btn {
-      margin-top: 6px; height: 50px;
+      margin-top: 6px;
+      height: 50px;
       background: var(--blue);
-      border: 3px solid var(--bd); color: #fff;
+      border: 3px solid var(--bd);
+      color: #fff;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(9px, 1.4vw, 13px);
-      cursor: pointer; letter-spacing: 2px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      /* 3-D pixel shadow */
       box-shadow: 0 5px 0 #1e3870, 4px 4px 0 #1e3870;
       transition: transform .08s, box-shadow .08s, background .1s;
       touch-action: manipulation;
     }
     .submit-btn:hover { background: var(--blue2); }
-    .submit-btn:active { transform: translate(4px,5px); box-shadow: none; }
+    .submit-btn:active {
+      transform: translate(4px, 5px);
+      box-shadow: none;
+    }
+
+    /* Login link */
     .login-link {
       text-align: center;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(4.5px, 0.7vw, 6.5px);
-      color: #aaa; margin-top: 10px;
+      color: #aaa;
+      margin-top: 10px;
     }
     .login-link a { color: var(--blue); text-decoration: none; }
     .login-link a:hover { text-decoration: underline; }
+
+    /* ── Success overlay ── */
     #success-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.70); z-index: 999;
-      align-items: center; justify-content: center; padding: 16px;
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.70);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
     #success-overlay.show { display: flex; }
+
     .success-box {
       background: var(--cream);
       border: 4px solid var(--bd);
       box-shadow: 0 0 0 1px #162540, 8px 8px 0 #162540;
-      padding: 32px 26px; text-align: center;
+      padding: 32px 26px;
+      text-align: center;
       max-width: 360px; width: 100%;
     }
     .success-box .s-icon { font-size: 48px; margin-bottom: 16px; }
     .success-box h2 {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(10px, 3vw, 14px);
-      color: var(--bd); margin-bottom: 14px; line-height: 1.8;
+      color: var(--bd);
+      margin-bottom: 14px;
+      line-height: 1.8;
     }
     #s-name {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(8px, 2.5vw, 11px);
-      color: var(--green); margin-bottom: 12px;
+      color: var(--green);
+      margin-bottom: 12px;
     }
     .success-box .s-msg {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(6px, 1.8vw, 8px);
-      color: #666; line-height: 2.1; margin-bottom: 22px;
+      color: #666;
+      line-height: 2.1;
+      margin-bottom: 22px;
     }
     .success-btn {
-      background: var(--green); border: 3px solid #1e4a0a; color: #fff;
+      background: var(--green);
+      border: 3px solid #1e4a0a;
+      color: #fff;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(8px, 2.5vw, 10px);
-      padding: 12px 24px; cursor: pointer;
+      padding: 12px 24px;
+      cursor: pointer;
       box-shadow: 0 4px 0 #1e4a0a, 3px 3px 0 #1e4a0a;
       touch-action: manipulation;
     }
     .success-btn:hover { background: #4a8a28; }
     .success-btn:active { transform: translate(3px,4px); box-shadow: none; }
+
+    /* ── Mobile ≤600px ── */
     @media (max-width: 600px) {
       body { padding: 0; align-items: flex-start; }
       .window { border: none; box-shadow: none; width: 100%; min-height: 100dvh; }
       .titlebar { display: none; }
       .body { flex-direction: column; }
-      .left { width: 100%; border-right: none; border-bottom: 3px solid var(--bd); padding: 10px; }
+      .left {
+        width: 100%; border-right: none;
+        border-bottom: 3px solid var(--bd);
+        padding: 10px;
+      }
       .scene-header { font-size: 10px; padding: 7px; }
       canvas#scene { max-height: 210px; }
       .right { padding: 16px 14px 28px; }
       .form-header { margin-bottom: 14px; }
       .header-text h1 { font-size: 10px; }
-      .header-text p { font-size: 7px; }
+      .header-text p  { font-size: 7px; }
       form { gap: 11px; }
       .field label { font-size: 7px; padding-left: 40px; }
       .field-icon { width: 36px; min-height: 42px; }
@@ -227,6 +319,8 @@
       .submit-btn { height: 50px; font-size: 11px; }
       .login-link { font-size: 6px; }
     }
+
+    /* ── Tablet 601–860px ── */
     @media (min-width: 601px) and (max-width: 860px) {
       .left { width: 42%; }
       .header-text h1 { font-size: 10px; }
@@ -236,53 +330,72 @@
   </style>
 </head>
 <body>
+
+<!-- ═══════════════ WINDOW ═══════════════ -->
 <div class="window">
   <div class="titlebar">
-    <button class="tb-btn" title="Minimize" onclick="document.querySelector('.body').style.display=document.querySelector('.body').style.display==='none'?'flex':'none'">&#8212;</button>
-    <button class="tb-btn" title="Maximize">&#9633;</button>
-    <button class="tb-btn tb-close" title="Close" onclick="if(confirm('Close?'))document.querySelector('.window').style.display='none'">&#10005;</button>
+    <button class="tb-btn" title="Minimize" onclick="document.querySelector('.body').style.display=document.querySelector('.body').style.display==='none'?'flex':'none'">—</button>
+    <button class="tb-btn" title="Maximize">□</button>
+    <button class="tb-btn tb-close" title="Close" onclick="if(confirm('Close?'))document.querySelector('.window').style.display='none'">✕</button>
   </div>
+
   <div class="body">
+
+    <!-- ── Left: Pixel art scene ── -->
     <div class="left">
       <div class="scene-wrap">
         <div class="scene-header">JOIN THE<br>ADVENTURE!</div>
         <canvas id="scene" width="360" height="380"></canvas>
       </div>
     </div>
+
+    <!-- ── Right: Form ── -->
     <div class="right">
+
+      <!-- Header with laurel decorations -->
       <div class="form-header">
+        <!-- Left laurel -->
         <svg class="laurel-svg" width="24" height="46" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="20" cy="42" rx="9" ry="5" fill="#3b7318" transform="rotate(-12 20 42)"/>
           <ellipse cx="15" cy="31" rx="8.5" ry="4.5" fill="#4a8a20" transform="rotate(-28 15 31)"/>
           <ellipse cx="10" cy="20" rx="8" ry="4" fill="#3b7318" transform="rotate(-46 10 20)"/>
           <ellipse cx="5" cy="10" rx="7" ry="3.5" fill="#4a8a20" transform="rotate(-62 5 10)"/>
-          <ellipse cx="1" cy="2" rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
+          <ellipse cx="1" cy="2"  rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
+          <!-- Highlights -->
           <ellipse cx="21" cy="40" rx="5" ry="2.5" fill="#5aaa28" transform="rotate(-12 21 40)" opacity="0.55"/>
           <ellipse cx="16" cy="29" rx="4.5" ry="2" fill="#5aaa28" transform="rotate(-28 16 29)" opacity="0.55"/>
           <ellipse cx="11" cy="18" rx="4" ry="2" fill="#5aaa28" transform="rotate(-46 11 18)" opacity="0.55"/>
-          <ellipse cx="6" cy="8" rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
+          <ellipse cx="6"  cy="8"  rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
         </svg>
+
         <div class="header-text">
           <h1>CREATE YOUR ACCOUNT</h1>
           <p>JOIN THE COMMUNITY!</p>
         </div>
+
+        <!-- Right laurel (mirrored) -->
         <svg class="laurel-svg" width="24" height="46" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
           <ellipse cx="20" cy="42" rx="9" ry="5" fill="#3b7318" transform="rotate(-12 20 42)"/>
           <ellipse cx="15" cy="31" rx="8.5" ry="4.5" fill="#4a8a20" transform="rotate(-28 15 31)"/>
           <ellipse cx="10" cy="20" rx="8" ry="4" fill="#3b7318" transform="rotate(-46 10 20)"/>
           <ellipse cx="5" cy="10" rx="7" ry="3.5" fill="#4a8a20" transform="rotate(-62 5 10)"/>
-          <ellipse cx="1" cy="2" rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
+          <ellipse cx="1" cy="2"  rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
           <ellipse cx="21" cy="40" rx="5" ry="2.5" fill="#5aaa28" transform="rotate(-12 21 40)" opacity="0.55"/>
           <ellipse cx="16" cy="29" rx="4.5" ry="2" fill="#5aaa28" transform="rotate(-28 16 29)" opacity="0.55"/>
           <ellipse cx="11" cy="18" rx="4" ry="2" fill="#5aaa28" transform="rotate(-46 11 18)" opacity="0.55"/>
-          <ellipse cx="6" cy="8" rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
+          <ellipse cx="6"  cy="8"  rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
         </svg>
       </div>
+
+      <!-- Registration form -->
       <form id="reg-form" novalidate>
+
+        <!-- Full Name -->
         <div class="field">
           <label for="fullName">Full Name</label>
           <div class="input-row">
             <div class="field-icon">
+              <!-- Scroll icon 20×20 -->
               <svg width="20" height="20" viewBox="0 0 10 10">
                 <rect x="1" y="0" width="8" height="1" fill="#7a5010"/>
                 <rect x="0" y="1" width="10" height="8" fill="#e0b848"/>
@@ -293,163 +406,822 @@
                 <rect x="1" y="4" width="6" height="1" fill="#6a4008"/>
                 <rect x="1" y="6" width="5" height="1" fill="#6a4008"/>
                 <rect x="1" y="8" width="4" height="1" fill="#6a4008"/>
+                <!-- Shine -->
                 <rect x="1" y="1" width="7" height="1" fill="#f0d060" opacity="0.6"/>
               </svg>
             </div>
-            <input type="text" id="fullName" name="fullName" placeholder="Farmer Jane Doe" autocomplete="name" inputmode="text" />
+            <input type="text" id="fullName" name="fullName"
+              placeholder="Farmer Jane Doe"
+              autocomplete="name" inputmode="text" />
           </div>
           <span class="err-msg" id="err-fullName"></span>
         </div>
+
+        <!-- Nickname -->
         <div class="field">
           <label for="nickname">Nickname</label>
           <div class="input-row">
             <div class="field-icon">
+              <!-- Person bust 20×20 -->
               <svg width="20" height="20" viewBox="0 0 10 10">
                 <rect x="3" y="0" width="4" height="1" fill="#f5c886"/>
                 <rect x="2" y="1" width="6" height="3" fill="#f5c886"/>
                 <rect x="3" y="4" width="4" height="1" fill="#e8b870"/>
+                <!-- Shirt -->
                 <rect x="1" y="5" width="8" height="5" fill="#4a72c0"/>
                 <rect x="2" y="5" width="6" height="1" fill="#5a82d0"/>
+                <!-- Neck -->
                 <rect x="4" y="4" width="2" height="2" fill="#f5c886"/>
+                <!-- Eyes -->
                 <rect x="3" y="2" width="1" height="1" fill="#1a1a1a"/>
                 <rect x="6" y="2" width="1" height="1" fill="#1a1a1a"/>
+                <!-- Smile -->
                 <rect x="3" y="3" width="1" height="1" fill="#b07040"/>
                 <rect x="4" y="4" width="2" height="1" fill="#b07040"/>
                 <rect x="6" y="3" width="1" height="1" fill="#b07040"/>
               </svg>
             </div>
-            <input type="text" id="nickname" name="nickname" placeholder="JaneBerry" autocomplete="nickname" inputmode="text" />
+            <input type="text" id="nickname" name="nickname"
+              placeholder="JaneBerry"
+              autocomplete="nickname" inputmode="text" />
           </div>
           <span class="err-msg" id="err-nickname"></span>
         </div>
+
+        <!-- Age -->
         <div class="field">
           <label for="age">Age</label>
           <div class="input-row">
             <div class="field-icon">
+              <!-- Calendar 20×20 -->
               <svg width="20" height="20" viewBox="0 0 10 10">
                 <rect x="0" y="1" width="10" height="9" fill="#d0e0f8"/>
                 <rect x="0" y="1" width="10" height="3" fill="#4a72c0"/>
                 <rect x="0" y="0" width="10" height="1" fill="#2e4d88"/>
+                <!-- Ring pegs -->
                 <rect x="2" y="0" width="1" height="3" fill="#1a2d60"/>
                 <rect x="7" y="0" width="1" height="3" fill="#1a2d60"/>
+                <!-- Calendar grid -->
                 <rect x="1" y="5" width="2" height="1" fill="#2e4d88"/>
                 <rect x="4" y="5" width="2" height="1" fill="#2e4d88"/>
                 <rect x="7" y="5" width="2" height="1" fill="#2e4d88"/>
                 <rect x="1" y="7" width="2" height="1" fill="#2e4d88"/>
                 <rect x="4" y="7" width="2" height="1" fill="#4a72c0"/>
                 <rect x="7" y="7" width="2" height="1" fill="#2e4d88"/>
+                <rect x="5" y="8" width="1" height="1" fill="#4a72c0"/>
               </svg>
             </div>
-            <input type="number" id="age" name="age" placeholder="26" min="1" max="120" autocomplete="off" inputmode="numeric" />
+            <input type="number" id="age" name="age"
+              placeholder="26" min="1" max="120"
+              autocomplete="off" inputmode="numeric" />
           </div>
           <span class="err-msg" id="err-age"></span>
         </div>
+
+        <!-- Mobile -->
         <div class="field">
           <label for="mobile">Mobile</label>
           <div class="input-row">
             <div class="field-icon">
+              <!-- Phone 20×20 -->
               <svg width="20" height="20" viewBox="0 0 10 10">
                 <rect x="2" y="0" width="6" height="10" fill="#4a72c0"/>
                 <rect x="2" y="0" width="6" height="1" fill="#2e4d88"/>
                 <rect x="2" y="9" width="6" height="1" fill="#2e4d88"/>
+                <!-- Screen -->
                 <rect x="3" y="1" width="4" height="6" fill="#c8e0f8"/>
                 <rect x="3" y="1" width="4" height="1" fill="#a8c8e8"/>
+                <!-- Home button -->
                 <rect x="4" y="8" width="2" height="1" fill="#3a62a8"/>
+                <!-- Signal dots -->
                 <rect x="3" y="3" width="1" height="1" fill="#6890d0"/>
                 <rect x="5" y="3" width="1" height="1" fill="#6890d0"/>
                 <rect x="4" y="4" width="2" height="1" fill="#5080c0"/>
               </svg>
             </div>
-            <input type="tel" id="mobile" name="mobile" placeholder="+1 555-0123" autocomplete="tel" inputmode="tel" />
+            <input type="tel" id="mobile" name="mobile"
+              placeholder="+1 555-0123"
+              autocomplete="tel" inputmode="tel" />
           </div>
           <span class="err-msg" id="err-mobile"></span>
         </div>
+
+        <!-- Invite Code -->
         <div class="field">
           <label for="inviteCode">Invite Code</label>
           <div class="input-row">
             <div class="field-icon">
+              <!-- Key 20×20 -->
               <svg width="20" height="20" viewBox="0 0 10 10">
+                <!-- Key ring -->
                 <rect x="5" y="1" width="4" height="4" fill="#d4a820"/>
                 <rect x="6" y="2" width="2" height="2" fill="#f8d840"/>
                 <rect x="7" y="2" width="1" height="1" fill="#ffe870"/>
+                <!-- Key hole -->
                 <rect x="7" y="3" width="1" height="1" fill="#a07010"/>
+                <!-- Key shaft -->
                 <rect x="0" y="4" width="6" height="2" fill="#d4a820"/>
                 <rect x="0" y="4" width="6" height="1" fill="#e8c030"/>
+                <!-- Teeth -->
                 <rect x="0" y="6" width="2" height="2" fill="#d4a820"/>
                 <rect x="3" y="6" width="2" height="1" fill="#d4a820"/>
               </svg>
             </div>
-            <input type="text" id="inviteCode" name="inviteCode" placeholder="SDV-STAR" autocomplete="off" maxlength="20" style="text-transform:uppercase" />
+            <input type="text" id="inviteCode" name="inviteCode"
+              placeholder="SDV-STAR"
+              autocomplete="off" maxlength="20"
+              style="text-transform:uppercase" />
           </div>
           <span class="err-msg" id="err-inviteCode"></span>
         </div>
-        <button type="submit" class="submit-btn">REGISTER NOW &#9733;</button>
-        <p class="login-link">ALREADY HAVE AN ACCOUNT? <a href="#" id="login-link">LOG IN</a></p>
+
+        <button type="submit" class="submit-btn">REGISTER NOW ★</button>
+
+        <p class="login-link">
+          ALREADY HAVE AN ACCOUNT?
+          <a href="#" id="login-link">LOG IN</a>
+        </p>
       </form>
-    </div>
-  </div>
-</div>
+    </div><!-- /right -->
+  </div><!-- /body -->
+</div><!-- /window -->
+
+<!-- ── Success overlay ── -->
 <div id="success-overlay">
   <div class="success-box">
-    <div class="s-icon">&#127881;</div>
+    <div class="s-icon">🎉</div>
     <h2>WELCOME TO<br>THE ADVENTURE!</h2>
     <p id="s-name"></p>
     <p class="s-msg">Your account has been<br>created successfully!</p>
-    <button class="success-btn" onclick="document.getElementById('success-overlay').classList.remove('show')">START PLAYING &#8594;</button>
+    <button class="success-btn"
+      onclick="document.getElementById('success-overlay').classList.remove('show')">
+      START PLAYING →
+    </button>
   </div>
 </div>
+
+
+<!-- ════════════════════════════════════════════════
+     PIXEL ART CANVAS + FORM LOGIC
+════════════════════════════════════════════════ -->
 <script>
-(function(){
-  const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
-  function r(c,x,y,w,h){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,Math.max(1,w|0),Math.max(1,h|0));}
-  function cloud(x,y,w,h){r('#ffffff',x+w*.18,y,w*.64,h*.45);r('#ffffff',x,y+h*.38,w,h*.62);r('#eef8fe',x+2,y+h*.82,w-4,h*.18);}
-  function mountain(cx,peakY,hw,baseY){for(let y=peakY;y<=baseY;y++){const t=(y-peakY)/(baseY-peakY),ww=hw*t,vR=(148+t*48)|0,vG=(160+t*38)|0,vB=(172+t*20)|0;ctx.fillStyle=`rgb(${vR},${vG},${vB})`;ctx.fillRect((cx-ww)|0,y,Math.max(1,(ww*2)|0),1);}for(let y=peakY;y<=peakY+38;y++){const t=(y-peakY)/38,ww=hw*((y-peakY)/(baseY-peakY)),sw=ww*(1-t)*0.55;r('#eef5ff',cx-sw,y,sw*2,1);}}
-  function river(){for(let y=205;y<H;y++){const t=(y-205)/(H-205),cx=316-t*14;r('#4a90d9',cx,y,26,1);r('#5aace8',cx+3,y,14,1);r('#70c0f0',cx+6,y,6,1);}}
-  function tree(x,y,s){r('#7a5018',x+7*s,y+26*s,5*s,12*s);r('#5a3808',x+9*s,y+26*s,2*s,12*s);[['#1e6e18',0,y+20*s,18*s,8*s],['#28882a',1*s,y+15*s,16*s,7*s],['#1e6e18',2*s,y+10*s,14*s,7*s],['#28882a',3*s,y+5*s,12*s,7*s],['#1e6e18',4*s,y,9*s,7*s]].forEach(([c,dx,dy,dw,dh])=>r(c,x+dx,dy,dw,dh));r('#3aaa3a',x+2*s,y+5*s,4*s,3*s);r('#3aaa3a',x+3*s,y,3*s,2*s);r('#3aaa3a',x+s,y+15*s,4*s,2*s);}
-  function house(x,y,s){r('#daa860',x,y+10*s,24*s,14*s);r('#f0c878',x+2*s,y+11*s,4*s,10*s);r('#c89048',x+s,y+11*s,2*s,10*s);r('#a8cce8',x+12*s,y+12*s,6*s,5*s);r('#80a8cc',x+14*s,y+12*s,s,5*s);r('#80a8cc',x+12*s,y+14*s,6*s,s);for(let i=0;i<=12;i++)r('#c03028',x+i*s,y+(10-i)*s*0.85,(24-i*2)*s,3*s);r('#902018',x,y+10*s,24*s,s);r('#a88058',x+17*s,y+2*s,4*s,9*s);r('#c0c0b8',x+16*s,y+s,6*s,2*s);r('#d8d8d0',x+17*s,y-s,3*s,2*s);}
-  function character(x,y){r('#2e1a08',x+3,y-3,7,3);r('#2e1a08',x+13,y-3,7,3);r('#4a3010',x+3,y-3,7,1);r('#4a3010',x+13,y-3,7,1);r('#5a7a3a',x+2,y-13,19,10);r('#4a6828',x+11,y-13,1,10);r('#7a4818',x+2,y-14,19,2);r('#d4a020',x+9,y-14,5,2);r('#f0c830',x+10,y-14,3,2);r('#f2f2f2',x+2,y-24,18,11);r('#d8d8d8',x+3,y-23,3,9);r('#8b5018',x+18,y-24,7,11);r('#c88028',x+19,y-23,5,9);r('#8b5018',x+19,y-18,5,1);r('#f5c886',x-1,y-23,4,8);r('#e8b870',x,y-23,2,7);r('#f5c886',x+20,y-23,4,8);r('#f5c886',x+9,y-26,5,3);r('#f5c886',x+5,y-35,13,10);r('#e8b870',x+6,y-34,3,8);r('#1a1a1a',x+7,y-32,2,2);r('#1a1a1a',x+12,y-32,2,2);r('#ffffff',x+8,y-32,1,1);r('#ffffff',x+13,y-32,1,1);r('#f0a890',x+6,y-29,2,1);r('#f0a890',x+14,y-29,2,1);r('#a06838',x+8,y-30,1,1);r('#c0906a',x+9,y-29,5,1);r('#a06838',x+14,y-30,1,1);r('#b08030',x+2,y-36,20,2);r('#d0a040',x+3,y-36,18,1);r('#7a4e10',x+4,y-43,15,8);r('#8b5e20',x+4,y-43,15,1);r('#6a3e08',x+5,y-42,13,6);r('#5a3008',x+4,y-36,15,2);r('#f5c886',x+20,y-24,5,5);}
-  function cat(x,y){const c='#e8943a',lc='#f5a850';r(c,x,y+5,16,10);r(lc,x+1,y+6,6,8);r(c,x+2,y,12,8);r(c,x+2,y-4,4,5);r(c,x+10,y-4,4,5);r('#f09090',x+3,y-3,2,3);r('#f09090',x+11,y-3,2,3);r('#1a1a1a',x+4,y+2,2,2);r('#1a1a1a',x+10,y+2,2,2);r('#ffffff',x+5,y+2,1,1);r('#ffffff',x+11,y+2,1,1);r('#f08080',x+7,y+4,2,1);r('#c87830',x,y+4,5,1);r('#c87830',x+11,y+4,5,1);r(c,x+16,y+4,4,2);r(c,x+18,y+2,3,3);r(c,x+20,y+1,2,2);}
-  function campfire(x,y,frame){r('#8b3010',x-3,y+9,20,4);r('#6b2008',x,y+10,14,2);r('#8b3010',x+1,y+8,12,3);const f=frame%6,shift=f<3?0:1;r('#ff4500',x+3,y+4,10,7);r('#ff6820',x+4,y+1,8,9);if(shift===0){r('#ff8c00',x+5,y-1,6,8);r('#ffa020',x+7,y-3,3,7);}else{r('#ff8c00',x+4,y-1,7,7);r('#ffa020',x+6,y-4,4,8);}r('#ffd700',x+6,y+2,4,5);r('#fff8c0',x+7,y+3,2,3);if(f===0)r('#ff8c00',x+1,y+2,2,2);if(f===1)r('#ff4500',x+13,y,2,2);if(f===2)r('#ffd700',x+2,y-1,2,2);if(f===3)r('#ff8c00',x+12,y+3,2,2);if(f===4)r('#ff4500',x,y+5,2,1);if(f===5)r('#ffd700',x+14,y+1,2,2);}
-  function smoke(x,y,frame){const s=frame%16;[[0,8],[5,14],[10,20]].forEach(([start,rise])=>{const age=(s+start)%16;if(age<12){const opacity=(1-age/12)*0.55,oy=rise+age*1.8,ox=Math.sin(age*0.7)*3;ctx.globalAlpha=opacity;r('#c0c8d0',x+ox,y-oy,5-age/4,4-age/5);ctx.globalAlpha=1;}});}
-  function chest(x,y){r('#8b3010',x,y+5,22,13);r('#6b2008',x+1,y+5,20,2);r('#a04020',x,y,22,6);r('#c05030',x+1,y+1,20,2);[[0,0],[18,0],[0,14],[18,14]].forEach(([dx,dy])=>r('#d4a020',x+dx,y+dy,4,3));r('#c8a020',x,y+4,22,3);r('#f0d040',x+1,y+4,20,1);r('#f0c030',x+7,y+7,8,7);r('#d4a820',x+8,y+8,6,5);r('#f8e050',x+9,y+9,4,4);r('#8b6010',x+10,y+10,2,2);r('#f0d040',x+2,y+12,3,3);r('#f0d040',x+17,y+12,3,3);}
-  function sign(x,y){r('#8b6020',x+40,y+26,7,55);r('#6a4810',x+44,y+26,3,55);r('#d0aa58',x,y,88,26);r('#dab868',x+2,y+1,84,10);r('#8b5810',x,y,88,3);r('#8b5810',x,y+23,88,3);r('#8b5810',x,y,3,26);r('#8b5810',x+85,y,3,26);[[3,3],[80,3],[3,19],[80,19]].forEach(([dx,dy])=>{r('#d0d0a8',x+dx,y+dy,5,4);r('#e8e8c0',x+dx,y+dy,3,2);});ctx.save();ctx.font="bold 6px 'Press Start 2P', monospace";ctx.textBaseline='top';ctx.fillStyle='#3a1a00';ctx.fillText('JOIN THE',x+7,y+5);ctx.fillText('ADVENTURE!',x+4,y+14);ctx.restore();}
-  function drawScene(frame){
-    ctx.clearRect(0,0,W,H);
-    r('#87ceeb',0,0,W,192);r('#b4dff5',0,165,W,27);
-    cloud(14,16,58,19);cloud(115,8,50,16);cloud(226,20,62,19);
-    mountain(290,30,88,162);
-    r('#5db835',0,192,W,H-192);r('#3d9820',0,192,W,5);r('#74d042',0,215,W,5);
-    river();
-    tree(10,88,1.05);tree(42,97,0.88);tree(265,91,0.90);tree(298,99,0.80);tree(338,116,0.72);
-    house(12,112,0.82);house(284,110,0.76);
-    r('#68b838',0,238,W,5);
-    character(102,255);
-    sign(142,200);
-    cat(64,260);
-    chest(252,245);
-    campfire(222,252,frame);
-    smoke(226,252,frame);
+/* ─────────────────────────────────────────────
+   PIXEL ART SCENE  (all animations in one loop)
+───────────────────────────────────────────── */
+(function () {
+  const canvas = document.getElementById('scene');
+  const ctx    = canvas.getContext('2d');
+  const W = canvas.width;   // 360
+  const H = canvas.height;  // 380
+
+  /* ── Solid rectangle helper ── */
+  function r(col, x, y, w, h) {
+    ctx.fillStyle = col;
+    ctx.fillRect(x|0, y|0, Math.max(1, w|0), Math.max(1, h|0));
   }
-  let frameN=0;
-  function loop(){drawScene(frameN++);requestAnimationFrame(loop);}
-  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(loop);}else{setTimeout(loop,400);}
+
+  /* ══════════════════════════════════════════════
+     1. CLOUDS — drifting at different speeds
+  ══════════════════════════════════════════════ */
+  function cloudShape(x, y, w, h) {
+    r('#ffffff', x + w*.18, y,         w*.64, h*.45);
+    r('#ffffff', x,         y + h*.38, w,     h*.62);
+    r('#eef8fe', x + 2,    y + h*.82, w - 4, h*.18);
+  }
+  const CLOUD_DEFS = [
+    { baseX: 14,  y: 16, w: 58, h: 19, speed: 0.10 },
+    { baseX: 140, y: 8,  w: 52, h: 17, speed: 0.055 },
+    { baseX: 250, y: 22, w: 64, h: 20, speed: 0.14 },
+  ];
+  function drawClouds(f) {
+    CLOUD_DEFS.forEach(({ baseX, y, w, h, speed }) => {
+      const x = (baseX + f * speed) % (W + w + 20) - 10;
+      cloudShape(x, y, w, h);
+    });
+  }
+
+  /* ══════════════════════════════════════════════
+     2. BIRDS — flying across sky with wing flap
+  ══════════════════════════════════════════════ */
+  function drawBirdSprite(x, y, wingsUp) {
+    /* Each bird is an 8×3 pixel shape:
+       wings-up:  X X . X X   (M shape)
+                  . . X . .
+       wings-flat: . X . X .
+                   X . X . X  */
+    if (wingsUp) {
+      r('#222222', x,   y,   3, 1);   // left wing up
+      r('#222222', x+3, y-1, 2, 1);   // body
+      r('#222222', x+5, y,   3, 1);   // right wing up
+    } else {
+      r('#222222', x,   y+1, 3, 1);   // left wing down
+      r('#222222', x+3, y,   2, 1);   // body
+      r('#222222', x+5, y+1, 3, 1);   // right wing down
+    }
+  }
+  function drawBirds(f) {
+    /* Bird 1: faster, upper sky, slight vertical drift */
+    const b1x = ((f * 0.85 + 70) % (W + 40)) - 20;
+    const b1y = 28 + (Math.sin(f * 0.055) * 5) | 0;
+    drawBirdSprite(b1x, b1y, Math.sin(f * 0.28) > 0);
+
+    /* Bird 2: slower, slightly lower */
+    const b2x = ((f * 0.52 + 230) % (W + 40)) - 20;
+    const b2y = 46 + (Math.sin(f * 0.042 + 1.8) * 4) | 0;
+    drawBirdSprite(b2x, b2y, Math.sin(f * 0.22 + 2.5) > 0);
+  }
+
+  /* ══════════════════════════════════════════════
+     MOUNTAIN (static)
+  ══════════════════════════════════════════════ */
+  function mountain(cx, peakY, hw, baseY) {
+    for (let y = peakY; y <= baseY; y++) {
+      const t  = (y - peakY) / (baseY - peakY);
+      const ww = hw * t;
+      const vR = (148 + t * 48) | 0;
+      const vG = (160 + t * 38) | 0;
+      const vB = (172 + t * 20) | 0;
+      ctx.fillStyle = `rgb(${vR},${vG},${vB})`;
+      ctx.fillRect((cx - ww)|0, y, Math.max(1, (ww*2)|0), 1);
+    }
+    for (let y = peakY; y <= peakY + 38; y++) {
+      const t  = (y - peakY) / 38;
+      const ww = hw * ((y - peakY) / (baseY - peakY));
+      const sw = ww * (1 - t) * 0.55;
+      r('#eef5ff', cx - sw, y, sw * 2, 1);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RIVER (static shape)
+  ══════════════════════════════════════════════ */
+  function river() {
+    for (let y = 205; y < H; y++) {
+      const t  = (y - 205) / (H - 205);
+      const cx = 316 - t * 14;
+      r('#4a90d9', cx,   y, 26, 1);
+      r('#5aace8', cx+3, y, 14, 1);
+      r('#70c0f0', cx+6, y,  6, 1);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     3. RIVER SHIMMER — light glints flowing down
+  ══════════════════════════════════════════════ */
+  function riverShimmer(f) {
+    for (let i = 0; i < 5; i++) {
+      const t = ((f * 1.3 + i * 17) % 85) / 85;
+      const ry = 205 + t * (H - 205);
+      const cx = 316 - t * 14;
+      /* Fade in near top, fade out near bottom */
+      const alpha = 0.7 * (1 - Math.abs(t - 0.5) * 2);
+      ctx.globalAlpha = Math.max(0, alpha);
+      r('#c8eeff', cx + 4, ry,     7, 2);
+      r('#ffffff', cx + 6, ry,     3, 1);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     PINE TREE (static)
+  ══════════════════════════════════════════════ */
+  function tree(x, y, s) {
+    r('#7a5018', x + 7*s, y + 26*s, 5*s, 12*s);
+    r('#5a3808', x + 9*s, y + 26*s, 2*s, 12*s);
+    const layers = [
+      ['#1e6e18', 0,    y + 20*s, 18*s, 8*s],
+      ['#28882a', 1*s,  y + 15*s, 16*s, 7*s],
+      ['#1e6e18', 2*s,  y + 10*s, 14*s, 7*s],
+      ['#28882a', 3*s,  y + 5*s,  12*s, 7*s],
+      ['#1e6e18', 4*s,  y,         9*s, 7*s],
+    ];
+    layers.forEach(([col, dx, dy, dw, dh]) => r(col, x+dx, dy, dw, dh));
+    r('#3aaa3a', x + 2*s, y + 5*s,  4*s, 3*s);
+    r('#3aaa3a', x + 3*s, y,         3*s, 2*s);
+    r('#3aaa3a', x + 1*s, y + 15*s, 4*s, 2*s);
+  }
+
+  /* ══════════════════════════════════════════════
+     HOUSE (static)
+  ══════════════════════════════════════════════ */
+  function house(x, y, s) {
+    r('#daa860', x,        y + 10*s, 24*s, 14*s);
+    r('#f0c878', x + 2*s,  y + 11*s,  4*s, 10*s);
+    r('#c89048', x + 1*s,  y + 11*s,  2*s, 10*s);
+    r('#a8cce8', x + 12*s, y + 12*s,  6*s,  5*s);
+    r('#80a8cc', x + 14*s, y + 12*s,  1*s,  5*s);
+    r('#80a8cc', x + 12*s, y + 14*s,  6*s,  1*s);
+    for (let i = 0; i <= 12; i++) {
+      r('#c03028', x + i*s, y + (10 - i)*s * 0.85, (24 - i*2)*s, 3*s);
+    }
+    r('#902018', x, y + 10*s, 24*s, 1*s);
+    r('#a88058', x + 17*s, y + 2*s, 4*s, 9*s);
+    r('#c0c0b8', x + 16*s, y + 1*s, 6*s, 2*s);
+    r('#d8d8d0', x + 17*s, y - 1*s, 3*s, 2*s);
+  }
+
+  /* ══════════════════════════════════════════════
+     4. FLOWERS — bobbing in foreground
+  ══════════════════════════════════════════════ */
+  const FLOWER_XS = [52, 90, 170, 206, 238, 312];
+  /* Flower colors: alternate pink / yellow-orange */
+  const FLOWER_COLS = ['#ff6688', '#ff6688', '#ffaa22', '#ff6688', '#ffaa22', '#ff6688'];
+  function flowers(f) {
+    FLOWER_XS.forEach((fx, idx) => {
+      /* Pseudo-random phase using x as seed */
+      const phase = ((fx * 7919) % 628) / 100;
+      const bob   = (Math.sin(f * 0.07 + phase) * 2.5) | 0;
+      const fy    = 235 + bob;
+      const col   = FLOWER_COLS[idx];
+
+      /* Stem */
+      r('#2d7a08', fx + 1, fy + 3, 2, 7);
+      /* Leaves */
+      r('#38a010', fx - 3, fy + 5, 3, 2);
+      r('#38a010', fx + 4, fy + 6, 3, 2);
+      /* Petals (4 directions) */
+      r(col, fx - 3, fy,     4, 3);   // left
+      r(col, fx + 3, fy,     4, 3);   // right
+      r(col, fx,     fy - 3, 4, 3);   // top
+      r(col, fx,     fy + 3, 4, 3);   // bottom
+      /* Center */
+      r('#ffee00', fx,     fy,     4, 3);
+      /* Shine */
+      r('#ffffff', fx,     fy,     2, 1);
+    });
+  }
+
+  /* ══════════════════════════════════════════════
+     5. BUTTERFLY — orbiting + wing flap
+  ══════════════════════════════════════════════ */
+  function butterfly(f) {
+    /* Orbit around (195, 238) – above mid flowers */
+    const bx = (195 + Math.cos(f * 0.038) * 26) | 0;
+    const by  = (235 + Math.sin(f * 0.038) * 11) | 0;
+    const flap = (f % 16) < 8;   /* open 8 frames, closed 8 frames */
+
+    if (flap) {
+      /* Wings open — 4 wing segments */
+      r('#dd55ee', bx - 7, by - 4,  6, 5);  /* upper-left wing */
+      r('#dd55ee', bx + 3, by - 4,  6, 5);  /* upper-right wing */
+      r('#cc44cc', bx - 6, by + 2,  5, 4);  /* lower-left wing */
+      r('#cc44cc', bx + 3, by + 2,  5, 4);  /* lower-right wing */
+      /* Wing shine */
+      r('#ff88ff', bx - 6, by - 3,  3, 2);
+      r('#ff88ff', bx + 5, by - 3,  3, 2);
+      /* Wing spots */
+      r('#8822aa', bx - 5, by + 1,  2, 2);
+      r('#8822aa', bx + 5, by + 1,  2, 2);
+    } else {
+      /* Wings closed (narrow) */
+      r('#dd55ee', bx - 3, by - 3,  3, 6);  /* left */
+      r('#dd55ee', bx + 2, by - 3,  3, 6);  /* right */
+    }
+    /* Body */
+    r('#331144', bx,      by - 2,  2, 8);
+    r('#7733aa', bx,      by - 2,  1, 5);   /* shine */
+    /* Antennae */
+    r('#331144', bx - 2,  by - 5,  2, 3);
+    r('#331144', bx + 2,  by - 5,  2, 3);
+    r('#ffdd00', bx - 3,  by - 6,  2, 2);   /* antenna tips */
+    r('#ffdd00', bx + 3,  by - 6,  2, 2);
+  }
+
+  /* ══════════════════════════════════════════════
+     6. FARMER CHARACTER — bounce + arm wave
+  ══════════════════════════════════════════════ */
+  function character(x, baseY, f) {
+    /* Gentle bounce (body moves up/down by 2px) */
+    const bob    = (Math.sin(f * 0.08) * 2) | 0;
+    const y      = baseY + bob;
+    /* Right arm waves — pivots from shoulder, swings ±8px vertically */
+    const armOff = (Math.sin(f * 0.11) * 8) | 0;
+
+    /* Boots */
+    r('#2e1a08', x+3,  y-3, 7, 3);
+    r('#2e1a08', x+13, y-3, 7, 3);
+    r('#4a3010', x+3,  y-3, 7, 1);
+    r('#4a3010', x+13, y-3, 7, 1);
+
+    /* Pants */
+    r('#5a7a3a', x+2,  y-13, 19, 10);
+    r('#4a6828', x+11, y-13,  1, 10);
+
+    /* Belt */
+    r('#7a4818', x+2,  y-14, 19,  2);
+    r('#d4a020', x+9,  y-14,  5,  2);
+    r('#f0c830', x+10, y-14,  3,  2);
+
+    /* Shirt body */
+    r('#f2f2f2', x+2,  y-24, 18, 11);
+    r('#d8d8d8', x+3,  y-23,  3,  9);
+
+    /* Backpack */
+    r('#8b5018', x+18, y-24,  7, 11);
+    r('#c88028', x+19, y-23,  5,  9);
+    r('#8b5018', x+19, y-18,  5,  1);
+
+    /* Left arm (static, relaxed down) */
+    r('#f5c886', x-1,  y-23,  4,  9);
+    r('#e8b870', x,    y-23,  2,  8);
+    /* Left hand */
+    r('#f5c886', x-2,  y-15,  5,  4);
+
+    /* Right arm (waving — shoulder at y-24) */
+    const rArmTop = y - 24 + armOff;
+    r('#f5c886', x+20, rArmTop,      4,  9);
+    r('#e8b870', x+21, rArmTop,      2,  8);
+    /* Right hand (open, pointing at sign) */
+    r('#f5c886', x+19, rArmTop + 9,  6,  4);
+    r('#f5c886', x+20, rArmTop + 8,  5,  2);
+
+    /* Neck */
+    r('#f5c886', x+9,  y-26,  5,  3);
+
+    /* Head */
+    r('#f5c886', x+5,  y-35, 13, 10);
+    r('#e8b870', x+6,  y-34,  3,  8);
+
+    /* Eyes */
+    r('#1a1a1a', x+7,  y-32,  2,  2);
+    r('#1a1a1a', x+12, y-32,  2,  2);
+    r('#ffffff', x+8,  y-32,  1,  1);
+    r('#ffffff', x+13, y-32,  1,  1);
+
+    /* Blush */
+    r('#f0a890', x+6,  y-29,  2,  1);
+    r('#f0a890', x+14, y-29,  2,  1);
+
+    /* Smile */
+    r('#a06838', x+8,  y-30,  1,  1);
+    r('#c0906a', x+9,  y-29,  5,  1);
+    r('#a06838', x+14, y-30,  1,  1);
+
+    /* Hat brim */
+    r('#b08030', x+2,  y-36, 20,  2);
+    r('#d0a040', x+3,  y-36, 18,  1);
+
+    /* Hat crown */
+    r('#7a4e10', x+4,  y-43, 15,  8);
+    r('#8b5e20', x+4,  y-43, 15,  1);
+    r('#6a3e08', x+5,  y-42, 13,  6);
+
+    /* Hat band */
+    r('#5a3008', x+4,  y-36, 15,  2);
+
+    /* Enthusiasm sparkle above hat (every 40 frames) */
+    const sp = f % 80;
+    if (sp < 30) {
+      const sa = sp < 15 ? sp / 15 : (30 - sp) / 15;
+      ctx.globalAlpha = sa * 0.9;
+      r('#ffd700', x+14, y-48,  2, 2);
+      r('#ffd700', x+17, y-44,  2, 2);
+      r('#ff8800', x+16, y-52,  2, 2);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     7. CAT — tail wag + periodic blink
+  ══════════════════════════════════════════════ */
+  function cat(x, y, f) {
+    /* Tail wag: tip swings ±6px horizontally */
+    const wag  = (Math.sin(f * 0.14) * 6) | 0;
+    /* Blink: eyes close for 3 frames every 160 frames */
+    const blink = (f % 160) > 154;
+    const c     = '#e8943a';
+    const lc    = '#f5a850';
+    const dark  = '#1a1a1a';
+
+    /* Body */
+    r(c,  x,    y+5, 16, 10);
+    r(lc, x+1,  y+6,  6,  8);  /* tummy */
+
+    /* Head */
+    r(c,  x+2,  y,   12,  8);
+
+    /* Ears */
+    r(c,  x+2,  y-4,  4,  5);
+    r(c,  x+10, y-4,  4,  5);
+    r('#f09090', x+3,  y-3, 2, 3);  /* inner ear */
+    r('#f09090', x+11, y-3, 2, 3);
+
+    /* Eyes (with blink) */
+    if (blink) {
+      r(dark, x+4,  y+3, 4, 1);   /* closed left */
+      r(dark, x+10, y+3, 4, 1);   /* closed right */
+    } else {
+      r(dark, x+4,  y+2, 2, 2);
+      r(dark, x+10, y+2, 2, 2);
+      r('#ffffff', x+5,  y+2, 1, 1);  /* shine */
+      r('#ffffff', x+11, y+2, 1, 1);
+    }
+
+    /* Nose */
+    r('#f08080', x+7, y+4, 2, 1);
+
+    /* Whiskers */
+    r('#c87830', x,    y+4, 5, 1);
+    r('#c87830', x+11, y+4, 5, 1);
+
+    /* Tail — 3 segments, tip wags */
+    r(c, x+16, y+4,  5, 2);          /* tail base */
+    r(c, x+20, y+3 + (wag>>1), 4, 2); /* tail mid */
+    r(c, x+23, y+2 + wag,      4, 2); /* tail tip */
+    r('#f5b860', x+24, y+2+wag, 3, 2); /* tip highlight */
+  }
+
+  /* ══════════════════════════════════════════════
+     CAMPFIRE (existing, kept)
+  ══════════════════════════════════════════════ */
+  function campfire(x, y, frame) {
+    r('#8b3010', x-3,  y+9,  20, 4);
+    r('#6b2008', x,    y+10, 14, 2);
+    r('#8b3010', x+1,  y+8,  12, 3);
+
+    const f     = frame % 6;
+    const shift = f < 3 ? 0 : 1;
+
+    r('#ff4500', x+3, y+4, 10,  7);
+    r('#ff6820', x+4, y+1,  8,  9);
+    if (shift === 0) {
+      r('#ff8c00', x+5, y-1, 6, 8);
+      r('#ffa020', x+7, y-3, 3, 7);
+    } else {
+      r('#ff8c00', x+4, y-1, 7, 7);
+      r('#ffa020', x+6, y-4, 4, 8);
+    }
+    r('#ffd700', x+6, y+2, 4, 5);
+    r('#fff8c0', x+7, y+3, 2, 3);
+
+    if (f===0) r('#ff8c00', x+1,  y+2, 2, 2);
+    if (f===1) r('#ff4500', x+13, y+0, 2, 2);
+    if (f===2) r('#ffd700', x+2,  y-1, 2, 2);
+    if (f===3) r('#ff8c00', x+12, y+3, 2, 2);
+    if (f===4) r('#ff4500', x+0,  y+5, 2, 1);
+    if (f===5) r('#ffd700', x+14, y+1, 2, 2);
+  }
+
+  /* ── Smoke (existing, kept) ── */
+  function smoke(x, y, frame) {
+    const s = frame % 16;
+    [[0, 8], [5, 14], [10, 20]].forEach(([start, rise]) => {
+      const age = (s + start) % 16;
+      if (age < 12) {
+        const opacity = (1 - age / 12) * 0.55;
+        const oy = rise + age * 1.8;
+        const ox = Math.sin(age * 0.7) * 3;
+        ctx.globalAlpha = opacity;
+        r('#c0c8d0', x + ox, y - oy, 5 - age/4, 4 - age/5);
+        ctx.globalAlpha = 1;
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════
+     TREASURE CHEST (static shape)
+  ══════════════════════════════════════════════ */
+  function chest(x, y) {
+    r('#8b3010', x,    y+5, 22, 13);
+    r('#6b2008', x+1,  y+5, 20,  2);
+    r('#a04020', x,    y,   22,  6);
+    r('#c05030', x+1,  y+1, 20,  2);
+    [[0,0],[18,0],[0,14],[18,14]].forEach(([dx,dy]) => r('#d4a020', x+dx, y+dy, 4, 3));
+    r('#c8a020', x,    y+4, 22,  3);
+    r('#f0d040', x+1,  y+4, 20,  1);
+    r('#f0c030', x+7,  y+7,  8,  7);
+    r('#d4a820', x+8,  y+8,  6,  5);
+    r('#f8e050', x+9,  y+9,  4,  4);
+    r('#8b6010', x+10, y+10, 2,  2);
+    r('#f0d040', x+2,  y+12, 3, 3);
+    r('#f0d040', x+17, y+12, 3, 3);
+  }
+
+  /* ══════════════════════════════════════════════
+     8. CHEST SPARKLES — gold stars pulse every 100 frames
+  ══════════════════════════════════════════════ */
+  function chestSparkles(x, y, f) {
+    const cycle = f % 100;
+    if (cycle > 65) {
+      const p     = (cycle - 65) / 35;   /* 0 → 1 */
+      const alpha = p < 0.5 ? p * 2 : (1 - p) * 2;
+      ctx.globalAlpha = alpha;
+
+      /* Star 1 — left of chest */
+      r('#ffd700', x,    y-7,  2, 8);   /* vertical bar */
+      r('#ffd700', x-3,  y-3,  8, 2);   /* horizontal bar */
+      r('#ffffff', x,    y-5,  2, 4);   /* bright center */
+
+      /* Star 2 — right of chest */
+      r('#ffd700', x+18, y-6,  2, 7);
+      r('#ffd700', x+15, y-3,  8, 2);
+      r('#ffffff', x+18, y-4,  2, 3);
+
+      /* Star 3 — top center (smaller) */
+      r('#ffd700', x+9,  y-9,  2, 5);
+      r('#ffd700', x+7,  y-7,  6, 2);
+      r('#ffffaa', x+9,  y-8,  2, 3);
+
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ── Sign (with text) ── */
+  function sign(x, y) {
+    /* Post */
+    r('#8b6020', x+40, y+26, 7, 55);
+    r('#6a4810', x+44, y+26, 3, 55);
+
+    /* Board */
+    r('#d0aa58', x,    y,    88, 26);
+    r('#dab868', x+2,  y+1,  84, 10);
+
+    /* Border */
+    r('#8b5810', x,    y,    88,  3);
+    r('#8b5810', x,    y+23, 88,  3);
+    r('#8b5810', x,    y,     3, 26);
+    r('#8b5810', x+85, y,     3, 26);
+
+    /* Corner nails */
+    [[3,3],[80,3],[3,19],[80,19]].forEach(([dx,dy]) => {
+      r('#d0d0a8', x+dx, y+dy, 5, 4);
+      r('#e8e8c0', x+dx, y+dy, 3, 2);
+    });
+
+    /* Text (rendered after font is ready) */
+    ctx.save();
+    ctx.font = "bold 6px 'Press Start 2P', monospace";
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#3a1a00';
+    ctx.fillText("JOIN THE",    x + 7, y + 5);
+    ctx.fillText("ADVENTURE!",  x + 4, y + 14);
+    ctx.restore();
+  }
+
+  /* ══════════════════════════════════════════════
+     MAIN DRAW — called every frame
+  ══════════════════════════════════════════════ */
+  function drawScene(frame) {
+    ctx.clearRect(0, 0, W, H);
+
+    /* ── Sky ── */
+    r('#87ceeb', 0,   0,   W, 192);
+    r('#b4dff5', 0, 165,   W,  27);  /* horizon glow */
+
+    /* ── 1. Animated clouds ── */
+    drawClouds(frame);
+
+    /* ── 2. Birds flying ── */
+    drawBirds(frame);
+
+    /* ── Mountain ── */
+    mountain(290, 30, 88, 162);
+
+    /* ── Ground ── */
+    r('#5db835', 0, 192, W, H - 192);
+    r('#3d9820', 0, 192, W,   5);
+    r('#74d042', 0, 215, W,   5);
+
+    /* ── River ── */
+    river();
+
+    /* ── 3. River shimmer ── */
+    riverShimmer(frame);
+
+    /* ── Back trees ── */
+    tree(10,   88, 1.05);
+    tree(42,   97, 0.88);
+    tree(265,  91, 0.90);
+    tree(298,  99, 0.80);
+    tree(338, 116, 0.72);
+
+    /* ── Houses ── */
+    house(12,  112, 0.82);
+    house(284, 110, 0.76);
+
+    /* ── Front grass sheen ── */
+    r('#68b838', 0, 238, W, 5);
+
+    /* ── 4. Flowers bobbing ── */
+    flowers(frame);
+
+    /* ── 6. Farmer character (bouncing + waving) ── */
+    character(102, 255, frame);
+
+    /* ── Sign ── */
+    sign(142, 200);
+
+    /* ── 7. Cat (tail wag + blink) ── */
+    cat(64, 260, frame);
+
+    /* ── Chest ── */
+    chest(252, 245);
+
+    /* ── 8. Chest sparkles ── */
+    chestSparkles(252, 245, frame);
+
+    /* ── Campfire ── */
+    campfire(222, 252, frame);
+
+    /* ── Smoke above campfire ── */
+    smoke(226, 252, frame);
+
+    /* ── 5. Butterfly (drawn last → on top) ── */
+    butterfly(frame);
+  }
+
+  /* ── Animation loop (starts after font loads) ── */
+  let frameN = 0;
+  function loop() {
+    drawScene(frameN++);
+    requestAnimationFrame(loop);
+  }
+
+  /* Wait for Press Start 2P font before first draw */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(loop);
+  } else {
+    setTimeout(loop, 400);
+  }
 })();
-(function(){
-  const form=document.getElementById('reg-form');
-  const rules={
-    fullName:{validate:v=>v.trim().split(/\s+/).filter(Boolean).length>=2,msg:'Please enter first and last name'},
-    nickname:{validate:v=>v.trim().length>=2,msg:'Nickname must be at least 2 characters'},
-    age:{validate:v=>{const n=Number(v);return Number.isFinite(n)&&n>=1&&n<=120&&Number.isInteger(n);},msg:'Please enter a valid age (1 - 120)'},
-    mobile:{validate:v=>/^\+?[\d\s\-().]{7,20}$/.test(v.trim()),msg:'Please enter a valid phone number'},
-    inviteCode:{validate:v=>/^[A-Za-z0-9\-_]{3,20}$/.test(v.trim()),msg:'Code: 3-20 letters, numbers, or dashes'}
+
+
+/* ─────────────────────────────────────────────
+   FORM VALIDATION
+───────────────────────────────────────────── */
+(function () {
+  const form = document.getElementById('reg-form');
+
+  const rules = {
+    fullName: {
+      validate: v => v.trim().split(/\s+/).filter(Boolean).length >= 2,
+      msg: 'Please enter first and last name'
+    },
+    nickname: {
+      validate: v => v.trim().length >= 2,
+      msg: 'Nickname must be at least 2 characters'
+    },
+    age: {
+      validate: v => { const n = Number(v); return Number.isFinite(n) && n >= 1 && n <= 120 && Number.isInteger(n); },
+      msg: 'Please enter a valid age (1 – 120)'
+    },
+    mobile: {
+      validate: v => /^\+?[\d\s\-().]{7,20}$/.test(v.trim()),
+      msg: 'Please enter a valid phone number'
+    },
+    inviteCode: {
+      validate: v => /^[A-Za-z0-9\-_]{3,20}$/.test(v.trim()),
+      msg: 'Code: 3–20 letters, numbers, or dashes'
+    }
   };
-  function showErr(id,msg){document.getElementById(id).classList.add('err-inp');const sp=document.getElementById('err-'+id);sp.textContent=msg;sp.classList.add('show');}
-  function clrErr(id){document.getElementById(id).classList.remove('err-inp');document.getElementById('err-'+id).classList.remove('show');}
-  Object.keys(rules).forEach(id=>document.getElementById(id).addEventListener('input',()=>clrErr(id)));
-  const inv=document.getElementById('inviteCode');
-  inv.addEventListener('input',function(){const p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p,p);});
-  form.addEventListener('submit',function(e){e.preventDefault();let ok=true;Object.entries(rules).forEach(([id,rule])=>{if(!rule.validate(document.getElementById(id).value)){showErr(id,rule.msg);ok=false;}else clrErr(id);});if(ok){const nick=document.getElementById('nickname').value.trim();document.getElementById('s-name').textContent='★  '+nick+'  ★';document.getElementById('success-overlay').classList.add('show');}});
-  document.getElementById('login-link').addEventListener('click',e=>{e.preventDefault();alert('🗝️  Login page coming soon!');});
+
+  function showErr(id, msg) {
+    document.getElementById(id).classList.add('err-inp');
+    const sp = document.getElementById('err-' + id);
+    sp.textContent = msg;
+    sp.classList.add('show');
+  }
+  function clrErr(id) {
+    document.getElementById(id).classList.remove('err-inp');
+    document.getElementById('err-' + id).classList.remove('show');
+  }
+
+  /* Live clear */
+  Object.keys(rules).forEach(id =>
+    document.getElementById(id).addEventListener('input', () => clrErr(id))
+  );
+
+  /* Auto-uppercase invite code */
+  const inv = document.getElementById('inviteCode');
+  inv.addEventListener('input', function () {
+    const p = this.selectionStart;
+    this.value = this.value.toUpperCase();
+    this.setSelectionRange(p, p);
+  });
+
+  /* Submit */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let ok = true;
+    Object.entries(rules).forEach(([id, rule]) => {
+      if (!rule.validate(document.getElementById(id).value)) {
+        showErr(id, rule.msg); ok = false;
+      } else {
+        clrErr(id);
+      }
+    });
+    if (ok) {
+      const nick = document.getElementById('nickname').value.trim();
+      document.getElementById('s-name').textContent = '★  ' + nick + '  ★';
+      document.getElementById('success-overlay').classList.add('show');
+    }
+  });
+
+  /* Login link */
+  document.getElementById('login-link').addEventListener('click', e => {
+    e.preventDefault();
+    alert('🗝️  Login page coming soon!');
+  });
 })();
 </script>
 </body>
