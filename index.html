@@ -566,7 +566,7 @@
 ════════════════════════════════════════════════ -->
 <script>
 /* ─────────────────────────────────────────────
-   PIXEL ART SCENE
+   PIXEL ART SCENE  (all animations in one loop)
 ───────────────────────────────────────────── */
 (function () {
   const canvas = document.getElementById('scene');
@@ -574,20 +574,66 @@
   const W = canvas.width;   // 360
   const H = canvas.height;  // 380
 
-  /* Solid rectangle helper */
+  /* ── Solid rectangle helper ── */
   function r(col, x, y, w, h) {
     ctx.fillStyle = col;
     ctx.fillRect(x|0, y|0, Math.max(1, w|0), Math.max(1, h|0));
   }
 
-  /* ── Cloud ── */
-  function cloud(x, y, w, h) {
-    r('#ffffff', x + w*.18, y,        w*.64, h*.45);
-    r('#ffffff', x,         y + h*.38, w,    h*.62);
-    r('#eef8fe', x + 2,    y + h*.82, w-4,  h*.18);
+  /* ══════════════════════════════════════════════
+     1. CLOUDS — drifting at different speeds
+  ══════════════════════════════════════════════ */
+  function cloudShape(x, y, w, h) {
+    r('#ffffff', x + w*.18, y,         w*.64, h*.45);
+    r('#ffffff', x,         y + h*.38, w,     h*.62);
+    r('#eef8fe', x + 2,    y + h*.82, w - 4, h*.18);
+  }
+  const CLOUD_DEFS = [
+    { baseX: 14,  y: 16, w: 58, h: 19, speed: 0.10 },
+    { baseX: 140, y: 8,  w: 52, h: 17, speed: 0.055 },
+    { baseX: 250, y: 22, w: 64, h: 20, speed: 0.14 },
+  ];
+  function drawClouds(f) {
+    CLOUD_DEFS.forEach(({ baseX, y, w, h, speed }) => {
+      const x = (baseX + f * speed) % (W + w + 20) - 10;
+      cloudShape(x, y, w, h);
+    });
   }
 
-  /* ── Mountain ── */
+  /* ══════════════════════════════════════════════
+     2. BIRDS — flying across sky with wing flap
+  ══════════════════════════════════════════════ */
+  function drawBirdSprite(x, y, wingsUp) {
+    /* Each bird is an 8×3 pixel shape:
+       wings-up:  X X . X X   (M shape)
+                  . . X . .
+       wings-flat: . X . X .
+                   X . X . X  */
+    if (wingsUp) {
+      r('#222222', x,   y,   3, 1);   // left wing up
+      r('#222222', x+3, y-1, 2, 1);   // body
+      r('#222222', x+5, y,   3, 1);   // right wing up
+    } else {
+      r('#222222', x,   y+1, 3, 1);   // left wing down
+      r('#222222', x+3, y,   2, 1);   // body
+      r('#222222', x+5, y+1, 3, 1);   // right wing down
+    }
+  }
+  function drawBirds(f) {
+    /* Bird 1: faster, upper sky, slight vertical drift */
+    const b1x = ((f * 0.85 + 70) % (W + 40)) - 20;
+    const b1y = 28 + (Math.sin(f * 0.055) * 5) | 0;
+    drawBirdSprite(b1x, b1y, Math.sin(f * 0.28) > 0);
+
+    /* Bird 2: slower, slightly lower */
+    const b2x = ((f * 0.52 + 230) % (W + 40)) - 20;
+    const b2y = 46 + (Math.sin(f * 0.042 + 1.8) * 4) | 0;
+    drawBirdSprite(b2x, b2y, Math.sin(f * 0.22 + 2.5) > 0);
+  }
+
+  /* ══════════════════════════════════════════════
+     MOUNTAIN (static)
+  ══════════════════════════════════════════════ */
   function mountain(cx, peakY, hw, baseY) {
     for (let y = peakY; y <= baseY; y++) {
       const t  = (y - peakY) / (baseY - peakY);
@@ -598,7 +644,6 @@
       ctx.fillStyle = `rgb(${vR},${vG},${vB})`;
       ctx.fillRect((cx - ww)|0, y, Math.max(1, (ww*2)|0), 1);
     }
-    /* Snow cap */
     for (let y = peakY; y <= peakY + 38; y++) {
       const t  = (y - peakY) / 38;
       const ww = hw * ((y - peakY) / (baseY - peakY));
@@ -607,23 +652,42 @@
     }
   }
 
-  /* ── River ── */
+  /* ══════════════════════════════════════════════
+     RIVER (static shape)
+  ══════════════════════════════════════════════ */
   function river() {
     for (let y = 205; y < H; y++) {
       const t  = (y - 205) / (H - 205);
       const cx = 316 - t * 14;
-      r('#4a90d9', cx,    y, 26, 1);
-      r('#5aace8', cx+3,  y, 14, 1);
-      r('#70c0f0', cx+6,  y,  6, 1);
+      r('#4a90d9', cx,   y, 26, 1);
+      r('#5aace8', cx+3, y, 14, 1);
+      r('#70c0f0', cx+6, y,  6, 1);
     }
   }
 
-  /* ── Pine Tree ── */
+  /* ══════════════════════════════════════════════
+     3. RIVER SHIMMER — light glints flowing down
+  ══════════════════════════════════════════════ */
+  function riverShimmer(f) {
+    for (let i = 0; i < 5; i++) {
+      const t = ((f * 1.3 + i * 17) % 85) / 85;
+      const ry = 205 + t * (H - 205);
+      const cx = 316 - t * 14;
+      /* Fade in near top, fade out near bottom */
+      const alpha = 0.7 * (1 - Math.abs(t - 0.5) * 2);
+      ctx.globalAlpha = Math.max(0, alpha);
+      r('#c8eeff', cx + 4, ry,     7, 2);
+      r('#ffffff', cx + 6, ry,     3, 1);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     PINE TREE (static)
+  ══════════════════════════════════════════════ */
   function tree(x, y, s) {
-    /* Trunk */
     r('#7a5018', x + 7*s, y + 26*s, 5*s, 12*s);
     r('#5a3808', x + 9*s, y + 26*s, 2*s, 12*s);
-    /* Layers (bottom → top) */
     const layers = [
       ['#1e6e18', 0,    y + 20*s, 18*s, 8*s],
       ['#28882a', 1*s,  y + 15*s, 16*s, 7*s],
@@ -632,78 +696,156 @@
       ['#1e6e18', 4*s,  y,         9*s, 7*s],
     ];
     layers.forEach(([col, dx, dy, dw, dh]) => r(col, x+dx, dy, dw, dh));
-    /* Highlights */
     r('#3aaa3a', x + 2*s, y + 5*s,  4*s, 3*s);
     r('#3aaa3a', x + 3*s, y,         3*s, 2*s);
     r('#3aaa3a', x + 1*s, y + 15*s, 4*s, 2*s);
   }
 
-  /* ── House ── */
+  /* ══════════════════════════════════════════════
+     HOUSE (static)
+  ══════════════════════════════════════════════ */
   function house(x, y, s) {
-    /* Walls */
     r('#daa860', x,        y + 10*s, 24*s, 14*s);
-    r('#f0c878', x + 2*s,  y + 11*s,  4*s, 10*s); /* door light */
-    r('#c89048', x + 1*s,  y + 11*s,  2*s, 10*s); /* door shadow */
-    /* Window */
+    r('#f0c878', x + 2*s,  y + 11*s,  4*s, 10*s);
+    r('#c89048', x + 1*s,  y + 11*s,  2*s, 10*s);
     r('#a8cce8', x + 12*s, y + 12*s,  6*s,  5*s);
-    r('#80a8cc', x + 14*s, y + 12*s,  1*s,  5*s); /* divider */
-    r('#80a8cc', x + 12*s, y + 14*s,  6*s,  1*s); /* divider */
-    /* Roof */
+    r('#80a8cc', x + 14*s, y + 12*s,  1*s,  5*s);
+    r('#80a8cc', x + 12*s, y + 14*s,  6*s,  1*s);
     for (let i = 0; i <= 12; i++) {
       r('#c03028', x + i*s, y + (10 - i)*s * 0.85, (24 - i*2)*s, 3*s);
     }
     r('#902018', x, y + 10*s, 24*s, 1*s);
-    /* Chimney */
     r('#a88058', x + 17*s, y + 2*s, 4*s, 9*s);
     r('#c0c0b8', x + 16*s, y + 1*s, 6*s, 2*s);
-    /* Smoke puff */
     r('#d8d8d0', x + 17*s, y - 1*s, 3*s, 2*s);
   }
 
-  /* ── Farmer character ── */
-  function character(x, y) {
-    /* y = bottom baseline */
+  /* ══════════════════════════════════════════════
+     4. FLOWERS — bobbing in foreground
+  ══════════════════════════════════════════════ */
+  const FLOWER_XS = [52, 90, 170, 206, 238, 312];
+  /* Flower colors: alternate pink / yellow-orange */
+  const FLOWER_COLS = ['#ff6688', '#ff6688', '#ffaa22', '#ff6688', '#ffaa22', '#ff6688'];
+  function flowers(f) {
+    FLOWER_XS.forEach((fx, idx) => {
+      /* Pseudo-random phase using x as seed */
+      const phase = ((fx * 7919) % 628) / 100;
+      const bob   = (Math.sin(f * 0.07 + phase) * 2.5) | 0;
+      const fy    = 235 + bob;
+      const col   = FLOWER_COLS[idx];
+
+      /* Stem */
+      r('#2d7a08', fx + 1, fy + 3, 2, 7);
+      /* Leaves */
+      r('#38a010', fx - 3, fy + 5, 3, 2);
+      r('#38a010', fx + 4, fy + 6, 3, 2);
+      /* Petals (4 directions) */
+      r(col, fx - 3, fy,     4, 3);   // left
+      r(col, fx + 3, fy,     4, 3);   // right
+      r(col, fx,     fy - 3, 4, 3);   // top
+      r(col, fx,     fy + 3, 4, 3);   // bottom
+      /* Center */
+      r('#ffee00', fx,     fy,     4, 3);
+      /* Shine */
+      r('#ffffff', fx,     fy,     2, 1);
+    });
+  }
+
+  /* ══════════════════════════════════════════════
+     5. BUTTERFLY — orbiting + wing flap
+  ══════════════════════════════════════════════ */
+  function butterfly(f) {
+    /* Orbit around (195, 238) – above mid flowers */
+    const bx = (195 + Math.cos(f * 0.038) * 26) | 0;
+    const by  = (235 + Math.sin(f * 0.038) * 11) | 0;
+    const flap = (f % 16) < 8;   /* open 8 frames, closed 8 frames */
+
+    if (flap) {
+      /* Wings open — 4 wing segments */
+      r('#dd55ee', bx - 7, by - 4,  6, 5);  /* upper-left wing */
+      r('#dd55ee', bx + 3, by - 4,  6, 5);  /* upper-right wing */
+      r('#cc44cc', bx - 6, by + 2,  5, 4);  /* lower-left wing */
+      r('#cc44cc', bx + 3, by + 2,  5, 4);  /* lower-right wing */
+      /* Wing shine */
+      r('#ff88ff', bx - 6, by - 3,  3, 2);
+      r('#ff88ff', bx + 5, by - 3,  3, 2);
+      /* Wing spots */
+      r('#8822aa', bx - 5, by + 1,  2, 2);
+      r('#8822aa', bx + 5, by + 1,  2, 2);
+    } else {
+      /* Wings closed (narrow) */
+      r('#dd55ee', bx - 3, by - 3,  3, 6);  /* left */
+      r('#dd55ee', bx + 2, by - 3,  3, 6);  /* right */
+    }
+    /* Body */
+    r('#331144', bx,      by - 2,  2, 8);
+    r('#7733aa', bx,      by - 2,  1, 5);   /* shine */
+    /* Antennae */
+    r('#331144', bx - 2,  by - 5,  2, 3);
+    r('#331144', bx + 2,  by - 5,  2, 3);
+    r('#ffdd00', bx - 3,  by - 6,  2, 2);   /* antenna tips */
+    r('#ffdd00', bx + 3,  by - 6,  2, 2);
+  }
+
+  /* ══════════════════════════════════════════════
+     6. FARMER CHARACTER — bounce + arm wave
+  ══════════════════════════════════════════════ */
+  function character(x, baseY, f) {
+    /* Gentle bounce (body moves up/down by 2px) */
+    const bob    = (Math.sin(f * 0.08) * 2) | 0;
+    const y      = baseY + bob;
+    /* Right arm waves — pivots from shoulder, swings ±8px vertically */
+    const armOff = (Math.sin(f * 0.11) * 8) | 0;
 
     /* Boots */
     r('#2e1a08', x+3,  y-3, 7, 3);
     r('#2e1a08', x+13, y-3, 7, 3);
-    r('#4a3010', x+3,  y-3, 7, 1); /* boot highlight */
+    r('#4a3010', x+3,  y-3, 7, 1);
     r('#4a3010', x+13, y-3, 7, 1);
 
     /* Pants */
     r('#5a7a3a', x+2,  y-13, 19, 10);
-    r('#4a6828', x+11, y-13,  1, 10); /* crease */
+    r('#4a6828', x+11, y-13,  1, 10);
 
     /* Belt */
     r('#7a4818', x+2,  y-14, 19,  2);
-    r('#d4a020', x+9,  y-14,  5,  2); /* buckle */
-    r('#f0c830', x+10, y-14,  3,  2); /* buckle shine */
+    r('#d4a020', x+9,  y-14,  5,  2);
+    r('#f0c830', x+10, y-14,  3,  2);
 
     /* Shirt body */
     r('#f2f2f2', x+2,  y-24, 18, 11);
-    r('#d8d8d8', x+3,  y-23,  3, 9); /* fold shadow */
+    r('#d8d8d8', x+3,  y-23,  3,  9);
 
     /* Backpack */
     r('#8b5018', x+18, y-24,  7, 11);
     r('#c88028', x+19, y-23,  5,  9);
-    r('#8b5018', x+19, y-18,  5,  1); /* strap */
+    r('#8b5018', x+19, y-18,  5,  1);
 
-    /* Arms */
-    r('#f5c886', x-1,  y-23,  4,  8); /* left */
-    r('#e8b870', x+0,  y-23,  2,  7); /* left shadow */
-    r('#f5c886', x+20, y-23,  4,  8); /* right */
+    /* Left arm (static, relaxed down) */
+    r('#f5c886', x-1,  y-23,  4,  9);
+    r('#e8b870', x,    y-23,  2,  8);
+    /* Left hand */
+    r('#f5c886', x-2,  y-15,  5,  4);
+
+    /* Right arm (waving — shoulder at y-24) */
+    const rArmTop = y - 24 + armOff;
+    r('#f5c886', x+20, rArmTop,      4,  9);
+    r('#e8b870', x+21, rArmTop,      2,  8);
+    /* Right hand (open, pointing at sign) */
+    r('#f5c886', x+19, rArmTop + 9,  6,  4);
+    r('#f5c886', x+20, rArmTop + 8,  5,  2);
 
     /* Neck */
     r('#f5c886', x+9,  y-26,  5,  3);
 
     /* Head */
     r('#f5c886', x+5,  y-35, 13, 10);
-    r('#e8b870', x+6,  y-34,  3,  8); /* face shading */
+    r('#e8b870', x+6,  y-34,  3,  8);
 
     /* Eyes */
     r('#1a1a1a', x+7,  y-32,  2,  2);
     r('#1a1a1a', x+12, y-32,  2,  2);
-    r('#ffffff', x+8,  y-32,  1,  1); /* shine */
+    r('#ffffff', x+8,  y-32,  1,  1);
     r('#ffffff', x+13, y-32,  1,  1);
 
     /* Blush */
@@ -717,88 +859,112 @@
 
     /* Hat brim */
     r('#b08030', x+2,  y-36, 20,  2);
-    r('#d0a040', x+3,  y-36, 18,  1); /* brim shine */
+    r('#d0a040', x+3,  y-36, 18,  1);
 
     /* Hat crown */
     r('#7a4e10', x+4,  y-43, 15,  8);
-    r('#8b5e20', x+4,  y-43, 15,  1); /* crown top */
-    r('#6a3e08', x+5,  y-42, 13,  6); /* crown main */
+    r('#8b5e20', x+4,  y-43, 15,  1);
+    r('#6a3e08', x+5,  y-42, 13,  6);
 
     /* Hat band */
     r('#5a3008', x+4,  y-36, 15,  2);
 
-    /* Extended hand (toward sign) */
-    r('#f5c886', x+20, y-24,  5,  5);
+    /* Enthusiasm sparkle above hat (every 40 frames) */
+    const sp = f % 80;
+    if (sp < 30) {
+      const sa = sp < 15 ? sp / 15 : (30 - sp) / 15;
+      ctx.globalAlpha = sa * 0.9;
+      r('#ffd700', x+14, y-48,  2, 2);
+      r('#ffd700', x+17, y-44,  2, 2);
+      r('#ff8800', x+16, y-52,  2, 2);
+      ctx.globalAlpha = 1;
+    }
   }
 
-  /* ── Cat ── */
-  function cat(x, y) {
-    const c = '#e8943a', lc = '#f5a850', dark = '#1a1a1a';
+  /* ══════════════════════════════════════════════
+     7. CAT — tail wag + periodic blink
+  ══════════════════════════════════════════════ */
+  function cat(x, y, f) {
+    /* Tail wag: tip swings ±6px horizontally */
+    const wag  = (Math.sin(f * 0.14) * 6) | 0;
+    /* Blink: eyes close for 3 frames every 160 frames */
+    const blink = (f % 160) > 154;
+    const c     = '#e8943a';
+    const lc    = '#f5a850';
+    const dark  = '#1a1a1a';
+
     /* Body */
-    r(c,   x,    y+5, 16, 10);
-    r(lc,  x+1,  y+6,  6,  8); /* tummy */
+    r(c,  x,    y+5, 16, 10);
+    r(lc, x+1,  y+6,  6,  8);  /* tummy */
+
     /* Head */
-    r(c,   x+2,  y,   12,  8);
+    r(c,  x+2,  y,   12,  8);
+
     /* Ears */
-    r(c,   x+2,  y-4,  4,  5);
-    r(c,   x+10, y-4,  4,  5);
-    r('#f09090', x+3, y-3, 2, 3); /* inner ear */
-    r('#f09090', x+11,y-3, 2, 3);
-    /* Eyes */
-    r(dark, x+4, y+2, 2, 2);
-    r(dark, x+10,y+2, 2, 2);
-    r('#ffffff', x+5, y+2, 1, 1);
-    r('#ffffff', x+11,y+2, 1, 1);
+    r(c,  x+2,  y-4,  4,  5);
+    r(c,  x+10, y-4,  4,  5);
+    r('#f09090', x+3,  y-3, 2, 3);  /* inner ear */
+    r('#f09090', x+11, y-3, 2, 3);
+
+    /* Eyes (with blink) */
+    if (blink) {
+      r(dark, x+4,  y+3, 4, 1);   /* closed left */
+      r(dark, x+10, y+3, 4, 1);   /* closed right */
+    } else {
+      r(dark, x+4,  y+2, 2, 2);
+      r(dark, x+10, y+2, 2, 2);
+      r('#ffffff', x+5,  y+2, 1, 1);  /* shine */
+      r('#ffffff', x+11, y+2, 1, 1);
+    }
+
     /* Nose */
     r('#f08080', x+7, y+4, 2, 1);
+
     /* Whiskers */
-    r('#c87830', x,   y+4, 5, 1);
-    r('#c87830', x+11,y+4, 5, 1);
-    /* Tail */
-    r(c, x+16, y+4, 4, 2);
-    r(c, x+18, y+2, 3, 3);
-    r(c, x+20, y+1, 2, 2);
+    r('#c87830', x,    y+4, 5, 1);
+    r('#c87830', x+11, y+4, 5, 1);
+
+    /* Tail — 3 segments, tip wags */
+    r(c, x+16, y+4,  5, 2);          /* tail base */
+    r(c, x+20, y+3 + (wag>>1), 4, 2); /* tail mid */
+    r(c, x+23, y+2 + wag,      4, 2); /* tail tip */
+    r('#f5b860', x+24, y+2+wag, 3, 2); /* tip highlight */
   }
 
-  /* ── Campfire ── */
+  /* ══════════════════════════════════════════════
+     CAMPFIRE (existing, kept)
+  ══════════════════════════════════════════════ */
   function campfire(x, y, frame) {
-    /* Logs */
     r('#8b3010', x-3,  y+9,  20, 4);
     r('#6b2008', x,    y+10, 14, 2);
     r('#8b3010', x+1,  y+8,  12, 3);
 
-    /* Fire — flicker between 2 states */
-    const f = frame % 6;
+    const f     = frame % 6;
     const shift = f < 3 ? 0 : 1;
 
-    /* Base */
-    r('#ff4500', x+3,    y+4, 10,  7);
-    r('#ff6820', x+4,    y+1,  8,  9);
-    /* Mid flame */
+    r('#ff4500', x+3, y+4, 10,  7);
+    r('#ff6820', x+4, y+1,  8,  9);
     if (shift === 0) {
-      r('#ff8c00', x+5, y-1,   6,  8);
-      r('#ffa020', x+7, y-3,   3,  7);
+      r('#ff8c00', x+5, y-1, 6, 8);
+      r('#ffa020', x+7, y-3, 3, 7);
     } else {
-      r('#ff8c00', x+4, y-1,   7,  7);
-      r('#ffa020', x+6, y-4,   4,  8);
+      r('#ff8c00', x+4, y-1, 7, 7);
+      r('#ffa020', x+6, y-4, 4, 8);
     }
-    /* Core */
-    r('#ffd700', x+6, y+2,   4,  5);
-    r('#fff8c0', x+7, y+3,   2,  3); /* bright core */
+    r('#ffd700', x+6, y+2, 4, 5);
+    r('#fff8c0', x+7, y+3, 2, 3);
 
-    /* Ember sparks (animated) */
-    if (f === 0) r('#ff8c00', x+1,  y+2, 2, 2);
-    if (f === 1) r('#ff4500', x+13, y+0, 2, 2);
-    if (f === 2) r('#ffd700', x+2,  y-1, 2, 2);
-    if (f === 3) r('#ff8c00', x+12, y+3, 2, 2);
-    if (f === 4) r('#ff4500', x+0,  y+5, 2, 1);
-    if (f === 5) r('#ffd700', x+14, y+1, 2, 2);
+    if (f===0) r('#ff8c00', x+1,  y+2, 2, 2);
+    if (f===1) r('#ff4500', x+13, y+0, 2, 2);
+    if (f===2) r('#ffd700', x+2,  y-1, 2, 2);
+    if (f===3) r('#ff8c00', x+12, y+3, 2, 2);
+    if (f===4) r('#ff4500', x+0,  y+5, 2, 1);
+    if (f===5) r('#ffd700', x+14, y+1, 2, 2);
   }
 
-  /* ── Smoke ── */
+  /* ── Smoke (existing, kept) ── */
   function smoke(x, y, frame) {
     const s = frame % 16;
-    /* 3 rising puffs at different stages */
     [[0, 8], [5, 14], [10, 20]].forEach(([start, rise]) => {
       const age = (s + start) % 16;
       if (age < 12) {
@@ -812,27 +978,52 @@
     });
   }
 
-  /* ── Treasure chest ── */
+  /* ══════════════════════════════════════════════
+     TREASURE CHEST (static shape)
+  ══════════════════════════════════════════════ */
   function chest(x, y) {
-    /* Body */
     r('#8b3010', x,    y+5, 22, 13);
     r('#6b2008', x+1,  y+5, 20,  2);
-    /* Lid */
     r('#a04020', x,    y,   22,  6);
     r('#c05030', x+1,  y+1, 20,  2);
-    /* Corner studs */
     [[0,0],[18,0],[0,14],[18,14]].forEach(([dx,dy]) => r('#d4a020', x+dx, y+dy, 4, 3));
-    /* Metal band */
     r('#c8a020', x,    y+4, 22,  3);
     r('#f0d040', x+1,  y+4, 20,  1);
-    /* Lock */
     r('#f0c030', x+7,  y+7,  8,  7);
     r('#d4a820', x+8,  y+8,  6,  5);
     r('#f8e050', x+9,  y+9,  4,  4);
     r('#8b6010', x+10, y+10, 2,  2);
-    /* Rivets */
     r('#f0d040', x+2,  y+12, 3, 3);
     r('#f0d040', x+17, y+12, 3, 3);
+  }
+
+  /* ══════════════════════════════════════════════
+     8. CHEST SPARKLES — gold stars pulse every 100 frames
+  ══════════════════════════════════════════════ */
+  function chestSparkles(x, y, f) {
+    const cycle = f % 100;
+    if (cycle > 65) {
+      const p     = (cycle - 65) / 35;   /* 0 → 1 */
+      const alpha = p < 0.5 ? p * 2 : (1 - p) * 2;
+      ctx.globalAlpha = alpha;
+
+      /* Star 1 — left of chest */
+      r('#ffd700', x,    y-7,  2, 8);   /* vertical bar */
+      r('#ffd700', x-3,  y-3,  8, 2);   /* horizontal bar */
+      r('#ffffff', x,    y-5,  2, 4);   /* bright center */
+
+      /* Star 2 — right of chest */
+      r('#ffd700', x+18, y-6,  2, 7);
+      r('#ffd700', x+15, y-3,  8, 2);
+      r('#ffffff', x+18, y-4,  2, 3);
+
+      /* Star 3 — top center (smaller) */
+      r('#ffd700', x+9,  y-9,  2, 5);
+      r('#ffd700', x+7,  y-7,  6, 2);
+      r('#ffffaa', x+9,  y-8,  2, 3);
+
+      ctx.globalAlpha = 1;
+    }
   }
 
   /* ── Sign (with text) ── */
@@ -843,14 +1034,13 @@
 
     /* Board */
     r('#d0aa58', x,    y,    88, 26);
-    /* Inner lighter */
     r('#dab868', x+2,  y+1,  84, 10);
 
     /* Border */
-    r('#8b5810', x,    y,    88,  3); /* top */
-    r('#8b5810', x,    y+23, 88,  3); /* bottom */
-    r('#8b5810', x,    y,     3, 26); /* left */
-    r('#8b5810', x+85, y,     3, 26); /* right */
+    r('#8b5810', x,    y,    88,  3);
+    r('#8b5810', x,    y+23, 88,  3);
+    r('#8b5810', x,    y,     3, 26);
+    r('#8b5810', x+85, y,     3, 26);
 
     /* Corner nails */
     [[3,3],[80,3],[3,19],[80,19]].forEach(([dx,dy]) => {
@@ -858,73 +1048,86 @@
       r('#e8e8c0', x+dx, y+dy, 3, 2);
     });
 
-    /* Text – rendered AFTER font is ready (called from loop with font loaded) */
+    /* Text (rendered after font is ready) */
     ctx.save();
     ctx.font = "bold 6px 'Press Start 2P', monospace";
     ctx.textBaseline = 'top';
     ctx.fillStyle = '#3a1a00';
-    ctx.fillText("JOIN THE", x + 7, y + 5);
-    ctx.fillText("ADVENTURE!", x + 4, y + 14);
+    ctx.fillText("JOIN THE",    x + 7, y + 5);
+    ctx.fillText("ADVENTURE!",  x + 4, y + 14);
     ctx.restore();
   }
 
-  /* ══════════════════════════════════════
-     MAIN DRAW FUNCTION
-  ══════════════════════════════════════ */
+  /* ══════════════════════════════════════════════
+     MAIN DRAW — called every frame
+  ══════════════════════════════════════════════ */
   function drawScene(frame) {
     ctx.clearRect(0, 0, W, H);
 
-    /* Sky */
-    r('#87ceeb', 0, 0, W, 192);
-    r('#b4dff5', 0, 165, W, 27); /* horizon glow */
+    /* ── Sky ── */
+    r('#87ceeb', 0,   0,   W, 192);
+    r('#b4dff5', 0, 165,   W,  27);  /* horizon glow */
 
-    /* Clouds */
-    cloud(14,  16, 58, 19);
-    cloud(115, 8,  50, 16);
-    cloud(226, 20, 62, 19);
+    /* ── 1. Animated clouds ── */
+    drawClouds(frame);
 
-    /* Mountain */
+    /* ── 2. Birds flying ── */
+    drawBirds(frame);
+
+    /* ── Mountain ── */
     mountain(290, 30, 88, 162);
 
-    /* Ground */
+    /* ── Ground ── */
     r('#5db835', 0, 192, W, H - 192);
-    r('#3d9820', 0, 192, W,  5);   /* dark edge */
-    r('#74d042', 0, 215, W,  5);   /* highlight stripe */
+    r('#3d9820', 0, 192, W,   5);
+    r('#74d042', 0, 215, W,   5);
 
-    /* River */
+    /* ── River ── */
     river();
 
-    /* Back trees */
-    tree(10,  88, 1.05);
-    tree(42,  97, 0.88);
-    tree(265, 91, 0.90);
-    tree(298, 99, 0.80);
+    /* ── 3. River shimmer ── */
+    riverShimmer(frame);
+
+    /* ── Back trees ── */
+    tree(10,   88, 1.05);
+    tree(42,   97, 0.88);
+    tree(265,  91, 0.90);
+    tree(298,  99, 0.80);
     tree(338, 116, 0.72);
 
-    /* Houses */
-    house(12, 112, 0.82);
+    /* ── Houses ── */
+    house(12,  112, 0.82);
     house(284, 110, 0.76);
 
-    /* Front grass sheen */
+    /* ── Front grass sheen ── */
     r('#68b838', 0, 238, W, 5);
 
-    /* Character */
-    character(102, 255);
+    /* ── 4. Flowers bobbing ── */
+    flowers(frame);
 
-    /* Sign */
+    /* ── 6. Farmer character (bouncing + waving) ── */
+    character(102, 255, frame);
+
+    /* ── Sign ── */
     sign(142, 200);
 
-    /* Cat */
-    cat(64, 260);
+    /* ── 7. Cat (tail wag + blink) ── */
+    cat(64, 260, frame);
 
-    /* Chest */
+    /* ── Chest ── */
     chest(252, 245);
 
-    /* Campfire */
+    /* ── 8. Chest sparkles ── */
+    chestSparkles(252, 245, frame);
+
+    /* ── Campfire ── */
     campfire(222, 252, frame);
 
-    /* Smoke above campfire */
+    /* ── Smoke above campfire ── */
     smoke(226, 252, frame);
+
+    /* ── 5. Butterfly (drawn last → on top) ── */
+    butterfly(frame);
   }
 
   /* ── Animation loop (starts after font loads) ── */
@@ -938,7 +1141,7 @@
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(loop);
   } else {
-    setTimeout(loop, 400); /* fallback */
+    setTimeout(loop, 400);
   }
 })();
 
