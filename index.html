@@ -9,43 +9,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bd:    #2e4f8a;
-      --blue:  #4a72c0;
-      --blue2: #5a88d8;
-      --cream: #f0e8d0;
-      --cream2:#e0d8c0;
-      --sky:   #89cfe8;
-      --green: #3d7820;
+      --bd: #2e4d88;
+      --blue: #4a72c0;
+      --blue2: #5c84d4;
+      --cream: #f2ecd8;
+      --cream2: #e6dfc6;
+      --sky: #9fd4ea;
+      --green: #3b7318;
     }
-
     html { font-size: 16px; }
-
     body {
-      background: radial-gradient(ellipse at center, #a8ddf5 0%, #6ab5e0 100%);
+      background: linear-gradient(155deg, #c8ecfc 0%, #88c8e8 55%, #56aad4 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px;
+      padding: 16px;
     }
-
     .window {
-      width: min(940px, 100%);
+      width: min(960px, 100%);
       border: 3px solid var(--bd);
-      box-shadow: 5px 5px 0 #1a2d55;
+      box-shadow: 0 0 0 1px #162540, 6px 6px 0 #162540;
       background: var(--cream2);
     }
-
     .titlebar {
-      background: var(--blue);
+      background: linear-gradient(180deg, #6090d8 0%, #4a72c0 65%, #3860b0 100%);
       display: flex;
       align-items: center;
       justify-content: flex-end;
       padding: 5px 8px;
       border-bottom: 3px solid var(--bd);
-      gap: 4px;
+      gap: 5px;
     }
     .tb-btn {
       width: 20px; height: 20px;
@@ -55,366 +50,332 @@
       font-size: 9px; font-family: monospace;
       color: var(--bd);
       display: flex; align-items: center; justify-content: center;
-      user-select: none;
+      user-select: none; line-height: 1;
     }
     .tb-btn:hover { background: var(--cream2); }
-    .tb-close { background: #d04040; color: #fff; }
-    .tb-close:hover { background: #b03030; }
-
-    .body {
-      display: flex;
-      min-height: 540px;
-    }
-
+    .tb-close { background: #cc3838; color: #fff; border-color: #8b1818; }
+    .tb-close:hover { background: #aa2828; }
+    .body { display: flex; min-height: 560px; }
     .left {
       width: 44%;
-      background: var(--sky);
+      background: linear-gradient(180deg, #aad8f0 0%, #90cae8 100%);
       border-right: 3px solid var(--bd);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 12px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px;
     }
-
-    .scene-frame {
+    .scene-wrap {
       width: 100%;
       border: 3px solid var(--bd);
-      box-shadow: 3px 3px 0 #1a2d55;
+      box-shadow: 4px 4px 0 #162540;
       overflow: hidden;
     }
-
-    .scene-title-bar {
+    .scene-header {
       background: var(--cream);
       border-bottom: 3px solid var(--bd);
-      padding: 8px 6px;
+      padding: 9px 8px;
       text-align: center;
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(8px, 2vw, 13px);
+      font-size: clamp(8px, 2.2vw, 14px);
       color: var(--bd);
-      line-height: 1.9;
+      line-height: 1.85;
+      letter-spacing: 1px;
     }
-
     canvas#scene {
-      display: block;
-      width: 100%;
+      display: block; width: 100%;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
-
     .right {
-      flex: 1;
-      background: var(--cream);
-      padding: 24px 18px 18px;
-      display: flex;
-      flex-direction: column;
+      flex: 1; background: var(--cream);
+      padding: 26px 22px 20px;
+      display: flex; flex-direction: column;
     }
-
     .form-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-bottom: 20px;
     }
-    .laurel-wrap {
-      display: flex; flex-direction: column; gap: 3px;
-      flex-shrink: 0;
-    }
-    .lf { width: 5px; height: 13px; background: var(--green); border-radius: 0 50% 50% 0; }
-    .lr { width: 5px; height: 13px; background: var(--green); border-radius: 50% 0 0 50%; }
-    .lf:nth-child(2), .lr:nth-child(2) { width: 7px; }
-
+    .laurel-svg { flex-shrink: 0; }
     .header-text { text-align: center; }
     .header-text h1 {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(8px, 1.5vw, 13px);
-      color: var(--bd);
-      line-height: 1.7;
+      font-size: clamp(8px, 1.55vw, 14px);
+      color: var(--bd); line-height: 1.75; letter-spacing: 0.5px;
     }
     .header-text p {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(5px, 0.9vw, 8px);
-      color: #888;
-      margin-top: 5px;
+      font-size: clamp(5px, 0.85vw, 8px);
+      color: #888; margin-top: 6px; letter-spacing: 1px;
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-      flex: 1;
-    }
-
-    .field { display: flex; flex-direction: column; gap: 4px; }
-
+    form { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
     .field label {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(5.5px, 0.9vw, 8px);
-      color: var(--bd);
-      padding-left: 38px;
+      font-size: clamp(6px, 0.88vw, 8px);
+      color: var(--bd); padding-left: 42px;
     }
-
     .input-row { display: flex; align-items: stretch; }
-
     .field-icon {
-      width: 34px; min-height: 36px;
-      background: #bfcfe8;
+      width: 38px; min-height: 40px;
+      background: #c4d4ee;
       border: 2px solid var(--bd);
-      border-right: none;
+      border-right: 2px solid #8aa0c8;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .field-icon svg { image-rendering: pixelated; }
-
+    .field-icon svg { image-rendering: pixelated; display: block; }
     .field input {
-      flex: 1;
-      height: 36px;
-      border: 2px solid var(--bd);
-      background: #f8f4e8;
-      padding: 0 10px;
+      flex: 1; height: 40px;
+      border: 2px solid var(--bd); border-left: none;
+      background: #faf6ed;
+      padding: 0 12px;
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(6px, 0.9vw, 8px);
-      color: #333;
-      outline: none;
-      min-width: 0;
-      -webkit-text-size-adjust: 100%;
+      font-size: clamp(6px, 0.9vw, 8.5px);
+      color: #2a2a2a; outline: none; min-width: 0;
     }
     .field input:focus {
-      background: #fffef5;
+      background: #fffdf5;
       border-color: var(--blue2);
-      box-shadow: 0 0 0 2px rgba(74,114,192,0.25);
+      box-shadow: inset 0 0 0 1px var(--blue2);
     }
-    .field input.err-inp { border-color: #c03030; background: #fff4f4; }
+    .field input.err-inp { border-color: #bb2828; background: #fff3f3; }
     .field input[type="number"]::-webkit-inner-spin-button,
     .field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
     .field input[type="number"] { -moz-appearance: textfield; }
-
     .err-msg {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(5px, 0.75vw, 7px);
-      color: #c03030;
-      padding-left: 38px;
-      display: none;
+      font-size: clamp(4.5px, 0.7vw, 6.5px);
+      color: #bb2828; padding-left: 42px; display: none;
     }
     .err-msg.show { display: block; }
-
     .submit-btn {
-      margin-top: 4px;
-      height: 44px;
+      margin-top: 6px; height: 50px;
       background: var(--blue);
-      border: 3px solid var(--bd);
-      color: #fff;
+      border: 3px solid var(--bd); color: #fff;
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(8px, 1.3vw, 12px);
-      cursor: pointer;
-      letter-spacing: 1px;
-      box-shadow: 4px 4px 0 var(--bd);
+      font-size: clamp(9px, 1.4vw, 13px);
+      cursor: pointer; letter-spacing: 2px;
+      box-shadow: 0 5px 0 #1e3870, 4px 4px 0 #1e3870;
       transition: transform .08s, box-shadow .08s, background .1s;
       touch-action: manipulation;
     }
     .submit-btn:hover { background: var(--blue2); }
-    .submit-btn:active { transform: translate(4px,4px); box-shadow: none; }
-
+    .submit-btn:active { transform: translate(4px,5px); box-shadow: none; }
     .login-link {
       text-align: center;
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(4.5px, 0.75vw, 6.5px);
-      color: #999;
-      margin-top: 8px;
+      font-size: clamp(4.5px, 0.7vw, 6.5px);
+      color: #aaa; margin-top: 10px;
     }
     .login-link a { color: var(--blue); text-decoration: none; }
-    .login-link a:hover, .login-link a:active { text-decoration: underline; }
-
+    .login-link a:hover { text-decoration: underline; }
     #success-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 999;
-      align-items: center; justify-content: center;
-      padding: 16px;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.70); z-index: 999;
+      align-items: center; justify-content: center; padding: 16px;
     }
     #success-overlay.show { display: flex; }
-
     .success-box {
       background: var(--cream);
       border: 4px solid var(--bd);
-      box-shadow: 7px 7px 0 #1a2d55;
-      padding: 30px 22px;
-      text-align: center;
-      max-width: 340px; width: 100%;
+      box-shadow: 0 0 0 1px #162540, 8px 8px 0 #162540;
+      padding: 32px 26px; text-align: center;
+      max-width: 360px; width: 100%;
     }
-    .success-box .s-icon { font-size: 44px; margin-bottom: 14px; }
+    .success-box .s-icon { font-size: 48px; margin-bottom: 16px; }
     .success-box h2 {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(10px, 3vw, 13px);
-      color: var(--bd);
-      margin-bottom: 12px;
-      line-height: 1.8;
+      font-size: clamp(10px, 3vw, 14px);
+      color: var(--bd); margin-bottom: 14px; line-height: 1.8;
     }
     #s-name {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(8px, 2.5vw, 10px);
-      color: var(--green);
-      margin-bottom: 10px;
+      font-size: clamp(8px, 2.5vw, 11px);
+      color: var(--green); margin-bottom: 12px;
     }
-    .success-box p {
+    .success-box .s-msg {
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(6px, 1.8vw, 8px);
-      color: #666; line-height: 2;
-      margin-bottom: 20px;
+      color: #666; line-height: 2.1; margin-bottom: 22px;
     }
     .success-btn {
-      background: var(--green);
-      border: 3px solid #1e4a0a;
-      color: #fff;
+      background: var(--green); border: 3px solid #1e4a0a; color: #fff;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(8px, 2.5vw, 10px);
-      padding: 11px 22px;
-      cursor: pointer;
-      box-shadow: 3px 3px 0 #1e4a0a;
+      padding: 12px 24px; cursor: pointer;
+      box-shadow: 0 4px 0 #1e4a0a, 3px 3px 0 #1e4a0a;
       touch-action: manipulation;
     }
     .success-btn:hover { background: #4a8a28; }
-    .success-btn:active { transform: translate(3px,3px); box-shadow: none; }
-
+    .success-btn:active { transform: translate(3px,4px); box-shadow: none; }
     @media (max-width: 600px) {
-      body { padding: 0; align-items: stretch; }
-      .window { border: none; box-shadow: none; width: 100%; min-height: 100vh; }
+      body { padding: 0; align-items: flex-start; }
+      .window { border: none; box-shadow: none; width: 100%; min-height: 100dvh; }
       .titlebar { display: none; }
-      .body { flex-direction: column; min-height: 100vh; }
+      .body { flex-direction: column; }
       .left { width: 100%; border-right: none; border-bottom: 3px solid var(--bd); padding: 10px; }
-      .scene-title-bar { font-size: 10px; padding: 7px; }
-      canvas#scene { max-height: 200px; }
-      .right { padding: 16px 14px 24px; }
-      .form-header { margin-bottom: 14px; gap: 8px; }
+      .scene-header { font-size: 10px; padding: 7px; }
+      canvas#scene { max-height: 210px; }
+      .right { padding: 16px 14px 28px; }
+      .form-header { margin-bottom: 14px; }
       .header-text h1 { font-size: 10px; }
-      .header-text p  { font-size: 7px; }
-      form { gap: 10px; }
-      .field label { font-size: 7px; padding-left: 36px; }
-      .field-icon { width: 32px; min-height: 40px; }
-      .field input { height: 40px; font-size: 16px; }
-      .err-msg { font-size: 6px; }
-      .submit-btn { height: 48px; font-size: 11px; }
-      .login-link { font-size: 6px; margin-top: 10px; }
+      .header-text p { font-size: 7px; }
+      form { gap: 11px; }
+      .field label { font-size: 7px; padding-left: 40px; }
+      .field-icon { width: 36px; min-height: 42px; }
+      .field input { height: 42px; font-size: 16px; }
+      .err-msg { font-size: 6px; padding-left: 40px; }
+      .submit-btn { height: 50px; font-size: 11px; }
+      .login-link { font-size: 6px; }
     }
-
-    @media (min-width: 601px) and (max-width: 840px) {
+    @media (min-width: 601px) and (max-width: 860px) {
       .left { width: 42%; }
       .header-text h1 { font-size: 10px; }
       .field label { font-size: 7px; }
+      .field input { font-size: 7.5px; }
     }
   </style>
 </head>
 <body>
-
 <div class="window">
   <div class="titlebar">
-    <button class="tb-btn tb-min" title="Minimize">—</button>
-    <button class="tb-btn tb-max" title="Maximize">□</button>
-    <button class="tb-btn tb-close" title="Close">✕</button>
+    <button class="tb-btn" title="Minimize" onclick="document.querySelector('.body').style.display=document.querySelector('.body').style.display==='none'?'flex':'none'">&#8212;</button>
+    <button class="tb-btn" title="Maximize">&#9633;</button>
+    <button class="tb-btn tb-close" title="Close" onclick="if(confirm('Close?'))document.querySelector('.window').style.display='none'">&#10005;</button>
   </div>
-
   <div class="body">
     <div class="left">
-      <div class="scene-frame">
-        <div class="scene-title-bar">JOIN THE<br>ADVENTURE!</div>
-        <canvas id="scene" width="300" height="310"></canvas>
+      <div class="scene-wrap">
+        <div class="scene-header">JOIN THE<br>ADVENTURE!</div>
+        <canvas id="scene" width="360" height="380"></canvas>
       </div>
     </div>
-
     <div class="right">
       <div class="form-header">
-        <div class="laurel-wrap">
-          <div class="lf"></div><div class="lf"></div><div class="lf"></div>
-        </div>
+        <svg class="laurel-svg" width="24" height="46" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="20" cy="42" rx="9" ry="5" fill="#3b7318" transform="rotate(-12 20 42)"/>
+          <ellipse cx="15" cy="31" rx="8.5" ry="4.5" fill="#4a8a20" transform="rotate(-28 15 31)"/>
+          <ellipse cx="10" cy="20" rx="8" ry="4" fill="#3b7318" transform="rotate(-46 10 20)"/>
+          <ellipse cx="5" cy="10" rx="7" ry="3.5" fill="#4a8a20" transform="rotate(-62 5 10)"/>
+          <ellipse cx="1" cy="2" rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
+          <ellipse cx="21" cy="40" rx="5" ry="2.5" fill="#5aaa28" transform="rotate(-12 21 40)" opacity="0.55"/>
+          <ellipse cx="16" cy="29" rx="4.5" ry="2" fill="#5aaa28" transform="rotate(-28 16 29)" opacity="0.55"/>
+          <ellipse cx="11" cy="18" rx="4" ry="2" fill="#5aaa28" transform="rotate(-46 11 18)" opacity="0.55"/>
+          <ellipse cx="6" cy="8" rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
+        </svg>
         <div class="header-text">
           <h1>CREATE YOUR ACCOUNT</h1>
           <p>JOIN THE COMMUNITY!</p>
         </div>
-        <div class="laurel-wrap">
-          <div class="lr"></div><div class="lr"></div><div class="lr"></div>
-        </div>
+        <svg class="laurel-svg" width="24" height="46" viewBox="0 0 24 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+          <ellipse cx="20" cy="42" rx="9" ry="5" fill="#3b7318" transform="rotate(-12 20 42)"/>
+          <ellipse cx="15" cy="31" rx="8.5" ry="4.5" fill="#4a8a20" transform="rotate(-28 15 31)"/>
+          <ellipse cx="10" cy="20" rx="8" ry="4" fill="#3b7318" transform="rotate(-46 10 20)"/>
+          <ellipse cx="5" cy="10" rx="7" ry="3.5" fill="#4a8a20" transform="rotate(-62 5 10)"/>
+          <ellipse cx="1" cy="2" rx="5.5" ry="3" fill="#3b7318" transform="rotate(-75 1 2)"/>
+          <ellipse cx="21" cy="40" rx="5" ry="2.5" fill="#5aaa28" transform="rotate(-12 21 40)" opacity="0.55"/>
+          <ellipse cx="16" cy="29" rx="4.5" ry="2" fill="#5aaa28" transform="rotate(-28 16 29)" opacity="0.55"/>
+          <ellipse cx="11" cy="18" rx="4" ry="2" fill="#5aaa28" transform="rotate(-46 11 18)" opacity="0.55"/>
+          <ellipse cx="6" cy="8" rx="3.5" ry="1.8" fill="#5aaa28" transform="rotate(-62 6 8)" opacity="0.55"/>
+        </svg>
       </div>
-
       <form id="reg-form" novalidate>
         <div class="field">
           <label for="fullName">Full Name</label>
           <div class="input-row">
             <div class="field-icon">
-              <svg width="18" height="18" viewBox="0 0 9 9" fill="none">
-                <rect x="1" y="0" width="7" height="1" fill="#8b6420"/>
-                <rect x="0" y="1" width="9" height="7" fill="#d4a840"/>
-                <rect x="1" y="8" width="7" height="1" fill="#8b6420"/>
-                <rect x="1" y="2" width="6" height="1" fill="#7a5018"/>
-                <rect x="1" y="4" width="5" height="1" fill="#7a5018"/>
-                <rect x="1" y="6" width="4" height="1" fill="#7a5018"/>
+              <svg width="20" height="20" viewBox="0 0 10 10">
+                <rect x="1" y="0" width="8" height="1" fill="#7a5010"/>
+                <rect x="0" y="1" width="10" height="8" fill="#e0b848"/>
+                <rect x="1" y="9" width="8" height="1" fill="#7a5010"/>
+                <rect x="0" y="1" width="1" height="8" fill="#9a6828"/>
+                <rect x="9" y="1" width="1" height="8" fill="#9a6828"/>
+                <rect x="1" y="2" width="7" height="1" fill="#6a4008"/>
+                <rect x="1" y="4" width="6" height="1" fill="#6a4008"/>
+                <rect x="1" y="6" width="5" height="1" fill="#6a4008"/>
+                <rect x="1" y="8" width="4" height="1" fill="#6a4008"/>
+                <rect x="1" y="1" width="7" height="1" fill="#f0d060" opacity="0.6"/>
               </svg>
             </div>
             <input type="text" id="fullName" name="fullName" placeholder="Farmer Jane Doe" autocomplete="name" inputmode="text" />
           </div>
           <span class="err-msg" id="err-fullName"></span>
         </div>
-
         <div class="field">
           <label for="nickname">Nickname</label>
           <div class="input-row">
             <div class="field-icon">
-              <svg width="18" height="18" viewBox="0 0 9 9" fill="none">
-                <rect x="3" y="0" width="3" height="3" fill="#f5c886"/>
-                <rect x="2" y="2" width="5" height="3" fill="#f5c886"/>
-                <rect x="1" y="5" width="7" height="4" fill="#4a72c0"/>
-                <rect x="2" y="4" width="5" height="2" fill="#f5c886"/>
+              <svg width="20" height="20" viewBox="0 0 10 10">
+                <rect x="3" y="0" width="4" height="1" fill="#f5c886"/>
+                <rect x="2" y="1" width="6" height="3" fill="#f5c886"/>
+                <rect x="3" y="4" width="4" height="1" fill="#e8b870"/>
+                <rect x="1" y="5" width="8" height="5" fill="#4a72c0"/>
+                <rect x="2" y="5" width="6" height="1" fill="#5a82d0"/>
+                <rect x="4" y="4" width="2" height="2" fill="#f5c886"/>
+                <rect x="3" y="2" width="1" height="1" fill="#1a1a1a"/>
+                <rect x="6" y="2" width="1" height="1" fill="#1a1a1a"/>
+                <rect x="3" y="3" width="1" height="1" fill="#b07040"/>
+                <rect x="4" y="4" width="2" height="1" fill="#b07040"/>
+                <rect x="6" y="3" width="1" height="1" fill="#b07040"/>
               </svg>
             </div>
             <input type="text" id="nickname" name="nickname" placeholder="JaneBerry" autocomplete="nickname" inputmode="text" />
           </div>
           <span class="err-msg" id="err-nickname"></span>
         </div>
-
         <div class="field">
           <label for="age">Age</label>
           <div class="input-row">
             <div class="field-icon">
-              <svg width="18" height="18" viewBox="0 0 9 9" fill="none">
-                <rect x="0" y="2" width="9" height="7" fill="#c8d8f0"/>
-                <rect x="0" y="2" width="9" height="3" fill="#4a72c0"/>
-                <rect x="2" y="0" width="1" height="4" fill="#1a2d7c"/>
-                <rect x="6" y="0" width="1" height="4" fill="#1a2d7c"/>
-                <rect x="1" y="6" width="2" height="1" fill="#1a2d7c"/>
-                <rect x="4" y="6" width="2" height="1" fill="#1a2d7c"/>
-                <rect x="7" y="6" width="1" height="1" fill="#1a2d7c"/>
+              <svg width="20" height="20" viewBox="0 0 10 10">
+                <rect x="0" y="1" width="10" height="9" fill="#d0e0f8"/>
+                <rect x="0" y="1" width="10" height="3" fill="#4a72c0"/>
+                <rect x="0" y="0" width="10" height="1" fill="#2e4d88"/>
+                <rect x="2" y="0" width="1" height="3" fill="#1a2d60"/>
+                <rect x="7" y="0" width="1" height="3" fill="#1a2d60"/>
+                <rect x="1" y="5" width="2" height="1" fill="#2e4d88"/>
+                <rect x="4" y="5" width="2" height="1" fill="#2e4d88"/>
+                <rect x="7" y="5" width="2" height="1" fill="#2e4d88"/>
+                <rect x="1" y="7" width="2" height="1" fill="#2e4d88"/>
+                <rect x="4" y="7" width="2" height="1" fill="#4a72c0"/>
+                <rect x="7" y="7" width="2" height="1" fill="#2e4d88"/>
               </svg>
             </div>
             <input type="number" id="age" name="age" placeholder="26" min="1" max="120" autocomplete="off" inputmode="numeric" />
           </div>
           <span class="err-msg" id="err-age"></span>
         </div>
-
         <div class="field">
           <label for="mobile">Mobile</label>
           <div class="input-row">
             <div class="field-icon">
-              <svg width="18" height="18" viewBox="0 0 9 9" fill="none">
-                <rect x="2" y="0" width="5" height="9" fill="#4a72c0"/>
-                <rect x="3" y="1" width="3" height="6" fill="#c0d8f0"/>
-                <rect x="3" y="8" width="3" height="1" fill="#1a2d7c"/>
-                <rect x="4" y="7" width="1" height="1" fill="#fff"/>
+              <svg width="20" height="20" viewBox="0 0 10 10">
+                <rect x="2" y="0" width="6" height="10" fill="#4a72c0"/>
+                <rect x="2" y="0" width="6" height="1" fill="#2e4d88"/>
+                <rect x="2" y="9" width="6" height="1" fill="#2e4d88"/>
+                <rect x="3" y="1" width="4" height="6" fill="#c8e0f8"/>
+                <rect x="3" y="1" width="4" height="1" fill="#a8c8e8"/>
+                <rect x="4" y="8" width="2" height="1" fill="#3a62a8"/>
+                <rect x="3" y="3" width="1" height="1" fill="#6890d0"/>
+                <rect x="5" y="3" width="1" height="1" fill="#6890d0"/>
+                <rect x="4" y="4" width="2" height="1" fill="#5080c0"/>
               </svg>
             </div>
             <input type="tel" id="mobile" name="mobile" placeholder="+1 555-0123" autocomplete="tel" inputmode="tel" />
           </div>
           <span class="err-msg" id="err-mobile"></span>
         </div>
-
         <div class="field">
           <label for="inviteCode">Invite Code</label>
           <div class="input-row">
             <div class="field-icon">
-              <svg width="18" height="18" viewBox="0 0 9 9" fill="none">
-                <rect x="4" y="1" width="4" height="4" fill="#d4a820"/>
-                <rect x="5" y="2" width="2" height="2" fill="#f8d840"/>
-                <rect x="0" y="4" width="5" height="2" fill="#d4a820"/>
-                <rect x="0" y="6" width="2" height="3" fill="#d4a820"/>
+              <svg width="20" height="20" viewBox="0 0 10 10">
+                <rect x="5" y="1" width="4" height="4" fill="#d4a820"/>
+                <rect x="6" y="2" width="2" height="2" fill="#f8d840"/>
+                <rect x="7" y="2" width="1" height="1" fill="#ffe870"/>
+                <rect x="7" y="3" width="1" height="1" fill="#a07010"/>
+                <rect x="0" y="4" width="6" height="2" fill="#d4a820"/>
+                <rect x="0" y="4" width="6" height="1" fill="#e8c030"/>
+                <rect x="0" y="6" width="2" height="2" fill="#d4a820"/>
                 <rect x="3" y="6" width="2" height="1" fill="#d4a820"/>
               </svg>
             </div>
@@ -422,189 +383,72 @@
           </div>
           <span class="err-msg" id="err-inviteCode"></span>
         </div>
-
-        <button type="submit" class="submit-btn">REGISTER NOW ★</button>
-
-        <p class="login-link">
-          ALREADY HAVE AN ACCOUNT?
-          <a href="#" id="login-link">LOG IN</a>
-        </p>
+        <button type="submit" class="submit-btn">REGISTER NOW &#9733;</button>
+        <p class="login-link">ALREADY HAVE AN ACCOUNT? <a href="#" id="login-link">LOG IN</a></p>
       </form>
     </div>
   </div>
 </div>
-
 <div id="success-overlay">
   <div class="success-box">
-    <div class="s-icon">🎉</div>
+    <div class="s-icon">&#127881;</div>
     <h2>WELCOME TO<br>THE ADVENTURE!</h2>
     <p id="s-name"></p>
-    <p>Your account has been<br>created successfully!</p>
-    <button class="success-btn" onclick="document.getElementById('success-overlay').classList.remove('show')">
-      START PLAYING →
-    </button>
+    <p class="s-msg">Your account has been<br>created successfully!</p>
+    <button class="success-btn" onclick="document.getElementById('success-overlay').classList.remove('show')">START PLAYING &#8594;</button>
   </div>
 </div>
-
 <script>
-(function () {
-  const canvas = document.getElementById('scene');
-  const ctx    = canvas.getContext('2d');
-  const W = canvas.width;
-  const H = canvas.height;
-
-  function r(color, x, y, w, h) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x|0, y|0, (w|0) || 1, (h|0) || 1);
-  }
-
-  function drawScene(frame) {
-    ctx.clearRect(0, 0, W, H);
-    r('#89cfe8', 0, 0, W, 178);
-    r('#b0dff0', 0, 155, W, 23);
-    cloud(14, 15, 52, 17); cloud(98, 8, 44, 14); cloud(196, 20, 55, 16);
-    mountain(212, 28, 90, 150);
-    r('#5b9e35', 0, 175, W, H - 175);
-    r('#4a8a28', 0, 175, W, 4);
-    r('#72c048', 0, 198, W, 4);
+(function(){
+  const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+  function r(c,x,y,w,h){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,Math.max(1,w|0),Math.max(1,h|0));}
+  function cloud(x,y,w,h){r('#ffffff',x+w*.18,y,w*.64,h*.45);r('#ffffff',x,y+h*.38,w,h*.62);r('#eef8fe',x+2,y+h*.82,w-4,h*.18);}
+  function mountain(cx,peakY,hw,baseY){for(let y=peakY;y<=baseY;y++){const t=(y-peakY)/(baseY-peakY),ww=hw*t,vR=(148+t*48)|0,vG=(160+t*38)|0,vB=(172+t*20)|0;ctx.fillStyle=`rgb(${vR},${vG},${vB})`;ctx.fillRect((cx-ww)|0,y,Math.max(1,(ww*2)|0),1);}for(let y=peakY;y<=peakY+38;y++){const t=(y-peakY)/38,ww=hw*((y-peakY)/(baseY-peakY)),sw=ww*(1-t)*0.55;r('#eef5ff',cx-sw,y,sw*2,1);}}
+  function river(){for(let y=205;y<H;y++){const t=(y-205)/(H-205),cx=316-t*14;r('#4a90d9',cx,y,26,1);r('#5aace8',cx+3,y,14,1);r('#70c0f0',cx+6,y,6,1);}}
+  function tree(x,y,s){r('#7a5018',x+7*s,y+26*s,5*s,12*s);r('#5a3808',x+9*s,y+26*s,2*s,12*s);[['#1e6e18',0,y+20*s,18*s,8*s],['#28882a',1*s,y+15*s,16*s,7*s],['#1e6e18',2*s,y+10*s,14*s,7*s],['#28882a',3*s,y+5*s,12*s,7*s],['#1e6e18',4*s,y,9*s,7*s]].forEach(([c,dx,dy,dw,dh])=>r(c,x+dx,dy,dw,dh));r('#3aaa3a',x+2*s,y+5*s,4*s,3*s);r('#3aaa3a',x+3*s,y,3*s,2*s);r('#3aaa3a',x+s,y+15*s,4*s,2*s);}
+  function house(x,y,s){r('#daa860',x,y+10*s,24*s,14*s);r('#f0c878',x+2*s,y+11*s,4*s,10*s);r('#c89048',x+s,y+11*s,2*s,10*s);r('#a8cce8',x+12*s,y+12*s,6*s,5*s);r('#80a8cc',x+14*s,y+12*s,s,5*s);r('#80a8cc',x+12*s,y+14*s,6*s,s);for(let i=0;i<=12;i++)r('#c03028',x+i*s,y+(10-i)*s*0.85,(24-i*2)*s,3*s);r('#902018',x,y+10*s,24*s,s);r('#a88058',x+17*s,y+2*s,4*s,9*s);r('#c0c0b8',x+16*s,y+s,6*s,2*s);r('#d8d8d0',x+17*s,y-s,3*s,2*s);}
+  function character(x,y){r('#2e1a08',x+3,y-3,7,3);r('#2e1a08',x+13,y-3,7,3);r('#4a3010',x+3,y-3,7,1);r('#4a3010',x+13,y-3,7,1);r('#5a7a3a',x+2,y-13,19,10);r('#4a6828',x+11,y-13,1,10);r('#7a4818',x+2,y-14,19,2);r('#d4a020',x+9,y-14,5,2);r('#f0c830',x+10,y-14,3,2);r('#f2f2f2',x+2,y-24,18,11);r('#d8d8d8',x+3,y-23,3,9);r('#8b5018',x+18,y-24,7,11);r('#c88028',x+19,y-23,5,9);r('#8b5018',x+19,y-18,5,1);r('#f5c886',x-1,y-23,4,8);r('#e8b870',x,y-23,2,7);r('#f5c886',x+20,y-23,4,8);r('#f5c886',x+9,y-26,5,3);r('#f5c886',x+5,y-35,13,10);r('#e8b870',x+6,y-34,3,8);r('#1a1a1a',x+7,y-32,2,2);r('#1a1a1a',x+12,y-32,2,2);r('#ffffff',x+8,y-32,1,1);r('#ffffff',x+13,y-32,1,1);r('#f0a890',x+6,y-29,2,1);r('#f0a890',x+14,y-29,2,1);r('#a06838',x+8,y-30,1,1);r('#c0906a',x+9,y-29,5,1);r('#a06838',x+14,y-30,1,1);r('#b08030',x+2,y-36,20,2);r('#d0a040',x+3,y-36,18,1);r('#7a4e10',x+4,y-43,15,8);r('#8b5e20',x+4,y-43,15,1);r('#6a3e08',x+5,y-42,13,6);r('#5a3008',x+4,y-36,15,2);r('#f5c886',x+20,y-24,5,5);}
+  function cat(x,y){const c='#e8943a',lc='#f5a850';r(c,x,y+5,16,10);r(lc,x+1,y+6,6,8);r(c,x+2,y,12,8);r(c,x+2,y-4,4,5);r(c,x+10,y-4,4,5);r('#f09090',x+3,y-3,2,3);r('#f09090',x+11,y-3,2,3);r('#1a1a1a',x+4,y+2,2,2);r('#1a1a1a',x+10,y+2,2,2);r('#ffffff',x+5,y+2,1,1);r('#ffffff',x+11,y+2,1,1);r('#f08080',x+7,y+4,2,1);r('#c87830',x,y+4,5,1);r('#c87830',x+11,y+4,5,1);r(c,x+16,y+4,4,2);r(c,x+18,y+2,3,3);r(c,x+20,y+1,2,2);}
+  function campfire(x,y,frame){r('#8b3010',x-3,y+9,20,4);r('#6b2008',x,y+10,14,2);r('#8b3010',x+1,y+8,12,3);const f=frame%6,shift=f<3?0:1;r('#ff4500',x+3,y+4,10,7);r('#ff6820',x+4,y+1,8,9);if(shift===0){r('#ff8c00',x+5,y-1,6,8);r('#ffa020',x+7,y-3,3,7);}else{r('#ff8c00',x+4,y-1,7,7);r('#ffa020',x+6,y-4,4,8);}r('#ffd700',x+6,y+2,4,5);r('#fff8c0',x+7,y+3,2,3);if(f===0)r('#ff8c00',x+1,y+2,2,2);if(f===1)r('#ff4500',x+13,y,2,2);if(f===2)r('#ffd700',x+2,y-1,2,2);if(f===3)r('#ff8c00',x+12,y+3,2,2);if(f===4)r('#ff4500',x,y+5,2,1);if(f===5)r('#ffd700',x+14,y+1,2,2);}
+  function smoke(x,y,frame){const s=frame%16;[[0,8],[5,14],[10,20]].forEach(([start,rise])=>{const age=(s+start)%16;if(age<12){const opacity=(1-age/12)*0.55,oy=rise+age*1.8,ox=Math.sin(age*0.7)*3;ctx.globalAlpha=opacity;r('#c0c8d0',x+ox,y-oy,5-age/4,4-age/5);ctx.globalAlpha=1;}});}
+  function chest(x,y){r('#8b3010',x,y+5,22,13);r('#6b2008',x+1,y+5,20,2);r('#a04020',x,y,22,6);r('#c05030',x+1,y+1,20,2);[[0,0],[18,0],[0,14],[18,14]].forEach(([dx,dy])=>r('#d4a020',x+dx,y+dy,4,3));r('#c8a020',x,y+4,22,3);r('#f0d040',x+1,y+4,20,1);r('#f0c030',x+7,y+7,8,7);r('#d4a820',x+8,y+8,6,5);r('#f8e050',x+9,y+9,4,4);r('#8b6010',x+10,y+10,2,2);r('#f0d040',x+2,y+12,3,3);r('#f0d040',x+17,y+12,3,3);}
+  function sign(x,y){r('#8b6020',x+40,y+26,7,55);r('#6a4810',x+44,y+26,3,55);r('#d0aa58',x,y,88,26);r('#dab868',x+2,y+1,84,10);r('#8b5810',x,y,88,3);r('#8b5810',x,y+23,88,3);r('#8b5810',x,y,3,26);r('#8b5810',x+85,y,3,26);[[3,3],[80,3],[3,19],[80,19]].forEach(([dx,dy])=>{r('#d0d0a8',x+dx,y+dy,5,4);r('#e8e8c0',x+dx,y+dy,3,2);});ctx.save();ctx.font="bold 6px 'Press Start 2P', monospace";ctx.textBaseline='top';ctx.fillStyle='#3a1a00';ctx.fillText('JOIN THE',x+7,y+5);ctx.fillText('ADVENTURE!',x+4,y+14);ctx.restore();}
+  function drawScene(frame){
+    ctx.clearRect(0,0,W,H);
+    r('#87ceeb',0,0,W,192);r('#b4dff5',0,165,W,27);
+    cloud(14,16,58,19);cloud(115,8,50,16);cloud(226,20,62,19);
+    mountain(290,30,88,162);
+    r('#5db835',0,192,W,H-192);r('#3d9820',0,192,W,5);r('#74d042',0,215,W,5);
     river();
-    tree(10, 86, 1.0); tree(34, 94, 0.85); tree(220, 88, 0.85); tree(252, 96, 0.75);
-    house(12, 108, 0.78); house(235, 106, 0.73);
-    r('#68b038', 0, 226, W, 5);
-    character(96, 218);
-    sign(128, 192);
-    cat(62, 234);
-    campfire(182, 226, frame);
-    chest(206, 222);
+    tree(10,88,1.05);tree(42,97,0.88);tree(265,91,0.90);tree(298,99,0.80);tree(338,116,0.72);
+    house(12,112,0.82);house(284,110,0.76);
+    r('#68b838',0,238,W,5);
+    character(102,255);
+    sign(142,200);
+    cat(64,260);
+    chest(252,245);
+    campfire(222,252,frame);
+    smoke(226,252,frame);
   }
-
-  function cloud(x, y, w, h) {
-    r('#fff', x+w*.2, y, w*.6, h*.45);
-    r('#fff', x, y+h*.38, w, h*.62);
-    r('#e4f2fb', x+2, y+h*.85, w-4, h*.15);
-  }
-
-  function mountain(cx, peak, hw, base) {
-    for (let y = peak; y <= base; y++) {
-      const t = (y-peak)/(base-peak), ww = hw*t, v = 138+t*52|0;
-      ctx.fillStyle = `rgb(${v},${148+t*42|0},${152+t*32|0})`;
-      ctx.fillRect(cx-ww|0, y, (ww*2)|0||1, 1);
-    }
-    for (let y = peak; y <= peak+34; y++) {
-      const t=(y-peak)/34, ww=hw*((y-peak)/(base-peak)), sw=ww*(1-t)*0.52;
-      r('#eef5ff', cx-sw, y, sw*2, 1);
-    }
-  }
-
-  function river() {
-    for (let y = 196; y < H; y++) {
-      const t=(y-196)/(H-196), cx=266-t*16;
-      r('#4a90d9',cx,y,18,1); r('#5aa8e8',cx+3,y,8,1); r('#6ab8f0',cx+5,y,4,1);
-    }
-  }
-
-  function tree(x, y, s) {
-    r('#7a5018',x+6*s,y+24*s,4*s,10*s);
-    r('#1a5810',x,y+18*s,16*s,7*s); r('#228820',x+s,y+13*s,14*s,6*s);
-    r('#1a5810',x+2*s,y+8*s,12*s,6*s); r('#228820',x+3*s,y+4*s,10*s,5*s);
-    r('#1a5810',x+4*s,y,8*s,5*s); r('#32b032',x+2*s,y+4*s,3*s,2*s); r('#32b032',x+3*s,y,2*s,2*s);
-  }
-
-  function house(x, y, s) {
-    r('#d4a060',x,y+10*s,22*s,14*s); r('#f0c880',x+2*s,y+11*s,3*s,9*s); r('#c09040',x+s,y+11*s,s,9*s);
-    r('#a8c8e8',x+10*s,y+12*s,5*s,4*s); r('#7aa8c8',x+12*s,y+12*s,s,4*s);
-    for (let i=0;i<=11;i++) r('#c03028',x+i*s,y+(10-i)*s,(22-i*2)*s,3*s);
-    r('#901820',x,y+10*s,22*s,s); r('#a08060',x+16*s,y+2*s,3*s,8*s); r('#c8c8c8',x+15*s,y+s,5*s,2*s);
-  }
-
-  function character(x, y) {
-    r('#4a3010',x+3,y+18,5,2); r('#4a3010',x+11,y+18,5,2);
-    r('#5a7a38',x+3,y+12,13,7); r('#4a6828',x+5,y+14,1,5); r('#4a6828',x+12,y+14,1,5);
-    r('#f0f0f0',x+3,y+5,14,8); r('#d8d8d8',x+4,y+6,3,6);
-    r('#8b6020',x+15,y+5,5,8); r('#c8a040',x+16,y+6,3,6); r('#8b6020',x+16,y+9,3,1);
-    r('#f5c886',x+1,y+7,3,5); r('#f5c886',x+17,y+7,3,5);
-    r('#f5c886',x+7,y+2,5,4); r('#f5c886',x+5,y-1,9,7);
-    r('#1a1a1a',x+7,y+2,1,1); r('#1a1a1a',x+10,y+2,1,1);
-    r('#b07040',x+7,y+4,1,1); r('#b07040',x+10,y+4,1,1); r('#b07040',x+8,y+5,3,1);
-    r('#7a5018',x+3,y+1,13,2); r('#6a4010',x+5,y-5,9,7); r('#8b5820',x+5,y-5,9,1);
-    r('#f5c886',x+14,y+5,3,3);
-  }
-
-  function cat(x, y) {
-    r('#e8943a',x,y+5,14,9); r('#f5a850',x+1,y+6,5,7);
-    r('#e8943a',x+2,y,10,7); r('#e8943a',x+2,y-3,3,4); r('#e8943a',x+9,y-3,3,4);
-    r('#f08080',x+3,y-2,1,2); r('#f08080',x+10,y-2,1,2);
-    r('#1a1a1a',x+4,y+2,2,2); r('#1a1a1a',x+9,y+2,2,2);
-    r('#ffffff',x+5,y+2,1,1); r('#ffffff',x+10,y+2,1,1);
-    r('#f08080',x+6,y+4,2,1); r('#c87830',x,y+4,4,1); r('#c87830',x+10,y+4,4,1);
-    r('#e8943a',x+14,y+4,3,2); r('#e8943a',x+16,y+2,2,3); r('#e8943a',x+17,y+1,2,2);
-  }
-
-  function campfire(x, y, frame) {
-    r('#7a3010',x-2,y+8,16,3); r('#5a2008',x,y+9,12,1); r('#7a3010',x+1,y+7,10,2);
-    const f=frame%4;
-    r('#ff4500',x+3,y+3,8,6); r('#ff6820',x+4,y+1,6,7);
-    if(f<2){r('#ff8c00',x+5,y,4,6);r('#ffa020',x+6,y-1,2,5);}else{r('#ff8c00',x+4,y,5,5);r('#ffa020',x+5,y-2,3,6);}
-    r('#ffd700',x+5,y+2,3,4); r('#ffffff',x+6,y+3,1,2);
-    if(f===0)r('#ff4500',x+1,y+2,2,2);
-    if(f===1)r('#ff6820',x+11,y+1,2,2);
-    if(f===2)r('#ffa020',x+2,y,1,2);
-    if(f===3)r('#ff4500',x+10,y+2,2,1);
-  }
-
-  function chest(x, y) {
-    r('#8b3010',x,y+5,18,11); r('#6b2008',x+1,y+5,16,2);
-    r('#a04020',x,y,18,6); r('#b85030',x+1,y+1,16,2);
-    r('#d4a020',x,y,3,3); r('#d4a020',x+15,y,3,3); r('#d4a020',x,y+14,3,2); r('#d4a020',x+15,y+14,3,2);
-    r('#c89820',x,y+4,18,3); r('#f0c840',x+1,y+4,16,1);
-    r('#f0c030',x+6,y+6,6,6); r('#d4a020',x+7,y+7,4,4); r('#f0c030',x+8,y+8,2,3); r('#8b6010',x+8,y+9,2,1);
-    r('#f0c840',x+2,y+10,2,2); r('#f0c840',x+14,y+10,2,2);
-  }
-
-  function sign(x, y) {
-    r('#8b6020',x+8,y+12,4,18); r('#6a4810',x+9,y+12,1,18);
-    r('#c8a050',x,y,22,13);
-    r('#8b6020',x,y,22,2); r('#8b6020',x,y+11,22,2); r('#8b6020',x,y,2,13); r('#8b6020',x+20,y,2,13);
-    r('#5a3808',x+3,y+3,15,2); r('#5a3808',x+3,y+7,12,2);
-    r('#c8c8b0',x+2,y+1,2,2); r('#c8c8b0',x+18,y+1,2,2); r('#c8c8b0',x+2,y+10,2,2); r('#c8c8b0',x+18,y+10,2,2);
-  }
-
-  let frame = 0;
-  function loop() { drawScene(frame++); requestAnimationFrame(loop); }
-  loop();
+  let frameN=0;
+  function loop(){drawScene(frameN++);requestAnimationFrame(loop);}
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(loop);}else{setTimeout(loop,400);}
 })();
-
-(function () {
-  const form = document.getElementById('reg-form');
-  const rules = {
-    fullName:   { validate: v => v.trim().split(/\s+/).filter(Boolean).length >= 2, msg: 'Please enter your first and last name' },
-    nickname:   { validate: v => v.trim().length >= 2, msg: 'Nickname must be at least 2 characters' },
-    age:        { validate: v => { const n=Number(v); return Number.isInteger(n)&&n>=1&&n<=120; }, msg: 'Please enter a valid age (1 – 120)' },
-    mobile:     { validate: v => /^\+?[\d\s\-().]{7,20}$/.test(v.trim()), msg: 'Please enter a valid phone number' },
-    inviteCode: { validate: v => /^[A-Za-z0-9\-_]{3,20}$/.test(v.trim()), msg: 'Code: 3–20 letters, numbers, or dashes' }
+(function(){
+  const form=document.getElementById('reg-form');
+  const rules={
+    fullName:{validate:v=>v.trim().split(/\s+/).filter(Boolean).length>=2,msg:'Please enter first and last name'},
+    nickname:{validate:v=>v.trim().length>=2,msg:'Nickname must be at least 2 characters'},
+    age:{validate:v=>{const n=Number(v);return Number.isFinite(n)&&n>=1&&n<=120&&Number.isInteger(n);},msg:'Please enter a valid age (1 - 120)'},
+    mobile:{validate:v=>/^\+?[\d\s\-().]{7,20}$/.test(v.trim()),msg:'Please enter a valid phone number'},
+    inviteCode:{validate:v=>/^[A-Za-z0-9\-_]{3,20}$/.test(v.trim()),msg:'Code: 3-20 letters, numbers, or dashes'}
   };
-
-  function setErr(id,msg){document.getElementById(id).classList.add('err-inp');const sp=document.getElementById('err-'+id);sp.textContent=msg;sp.classList.add('show');}
+  function showErr(id,msg){document.getElementById(id).classList.add('err-inp');const sp=document.getElementById('err-'+id);sp.textContent=msg;sp.classList.add('show');}
   function clrErr(id){document.getElementById(id).classList.remove('err-inp');document.getElementById('err-'+id).classList.remove('show');}
-
   Object.keys(rules).forEach(id=>document.getElementById(id).addEventListener('input',()=>clrErr(id)));
-
   const inv=document.getElementById('inviteCode');
   inv.addEventListener('input',function(){const p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p,p);});
-
-  form.addEventListener('submit',function(e){
-    e.preventDefault(); let ok=true;
-    Object.entries(rules).forEach(([id,rule])=>{
-      if(!rule.validate(document.getElementById(id).value)){setErr(id,rule.msg);ok=false;}else clrErr(id);
-    });
-    if(ok){
-      document.getElementById('s-name').textContent='★  '+document.getElementById('nickname').value.trim()+'  ★';
-      document.getElementById('success-overlay').classList.add('show');
-    }
-  });
-
-  document.querySelector('.tb-close').addEventListener('click',()=>{if(confirm('Close?'))document.querySelector('.window').style.display='none';});
-  document.querySelector('.tb-min').addEventListener('click',()=>{const b=document.querySelector('.body');b.style.display=b.style.display==='none'?'flex':'none';});
+  form.addEventListener('submit',function(e){e.preventDefault();let ok=true;Object.entries(rules).forEach(([id,rule])=>{if(!rule.validate(document.getElementById(id).value)){showErr(id,rule.msg);ok=false;}else clrErr(id);});if(ok){const nick=document.getElementById('nickname').value.trim();document.getElementById('s-name').textContent='★  '+nick+'  ★';document.getElementById('success-overlay').classList.add('show');}});
   document.getElementById('login-link').addEventListener('click',e=>{e.preventDefault();alert('🗝️  Login page coming soon!');});
 })();
 </script>
